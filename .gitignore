@@ -7,3 +7,9 @@ map/node_modules/*
 map/package-lock.json
 map/.cache
 map/public
+
+# redacted files
+data/raw/2018_driver.csv
+data/raw/2019_driver.csv
+data/raw/non_redacted_20200101_20210101_driver.csv
+data/raw/non_redacted_20210101_20210701_driver.csv
