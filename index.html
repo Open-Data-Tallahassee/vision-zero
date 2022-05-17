@@ -1,8 +1,86 @@
-<h1> work in progress :-) check back soon! </h1>
-<br>
-<h2> we're currently working on: </h2>
-<ol>
-  <li> requesting October - December 2021 crash data </li>
-  <li> cleaning, analyzing, and visualizing 2021 crash data </li>
-</ol>
-<h2> if you'd like to help, please send an email to opentlh@gmail.com </h2>
+<div id="map"></div>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vision Zero Map</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+
+<body>
+<div id="map"></div>
+
+<script>
+mapboxgl.accessToken = 'pk.eyJ1Ijoic2hlbGJ5LWdyZWVuIiwiYSI6ImNrMHNobWdrNTAwZW8zYnA5czQ5cWh4ankifQ.TWYVyG-n0cmhTGvKg31eow';
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/light-v10',
+  zoom: 12,
+  center: [-84.28054689999016, 30.444679757470055]
+});
+
+map.on('load', function () {
+  map.addSource('points', {
+    type: 'geojson',
+    data: 'https://raw.githubusercontent.com/Open-Data-Tallahassee/vision-zero/main/crash-data/clean/all-2018to2021.geojson',
+    generateId: true
+  });
+  map.addLayer(
+    {
+    'id': 'points-layer',
+    'type': 'circle',
+    'source': 'points',
+    'layout': {},
+    'paint': {
+      'circle-radius': 3.75,
+      'circle-stroke-color': '#ccc',
+      'circle-stroke-width': 1,
+      'circle-color': [
+        'match',
+        ['get', 'first_harmful_event'],
+        10.0, /* ped */
+        '#0000CD', /* blue */
+        11.0, /* bike */
+        '#D2691E', /* orange */
+        32.0, /* tree */
+        '#3CB371', /* green */
+        /* other */ '#FF0000'
+        ]
+    },
+  },
+  );
+});
+
+map.on('click', 'points-layer', (e) => {
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  
+  new mapboxgl.Popup()
+  .setLngLat(coordinates)
+  .setHTML('Year:' + e.features[0].properties.crash_year + '<br>' +
+          'Crash Type:' + e.features[0].properties.first_harmful_event + '<br>' +
+          'Vehicles Involved:' + e.features[0].properties.total_number_of_vehicles + '<br>' +
+          'People Involved:' + e.features[0].properties.total_number_of_persons + '<br>')
+  .addTo(map);
+});
+
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'points-layer', () => {
+  map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'points-layer', () => {
+  map.getCanvas().style.cursor = '';
+});
+
+</script>
+</body>
+</html>
