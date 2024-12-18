@@ -32,9 +32,11 @@ export const getLeonCountyCrashData = async (): Promise<CrashData[] | null> => {
               injury_severity: d.injury_severity
                 ? Number(d.injury_severity)
                 : 0,
-              non_motorist_description_code: d.non_motorist_description_code
-                ? Number(d.non_motorist_description_code)
-                : undefined, // Use undefined if not present
+              non_motorist_description_code:
+                d.non_motorist_description_code != null
+                  ? Number(d.non_motorist_description_code)
+                  : undefined,
+
               crash_date_time: d.crash_date_time,
               latitude: d.latitude ? Number(d.latitude) : 0,
               longitude: d.longitude ? Number(d.longitude) : 0,

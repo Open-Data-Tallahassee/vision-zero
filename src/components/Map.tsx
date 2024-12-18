@@ -44,7 +44,15 @@ const Map = (props: MapProps) => {
           source: "crashData",
           paint: {
             "circle-radius": 6,
-            "circle-color": "#FF0000",
+            "circle-color": [
+              "match",
+              ["get", "crash_type"],
+              "Pedestrian",
+              "#C4291D", // Red for Pedestrian
+              "Bicyclist",
+              "#F5AE3D", // Yellow for Bicyclist
+              "#3C90E2", // Blue for Others
+            ],
             "circle-opacity": 0.6,
           },
         });

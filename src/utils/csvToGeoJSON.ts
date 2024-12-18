@@ -31,6 +31,7 @@ export interface GeoJSONFeature {
     details: CrashDetail[];
     is_fatal: boolean; // property for filtering
     crash_types: string[];
+    crash_type: "Pedestrian" | "Bicyclist" | "Motor Vehicle"; // New property
   };
 }
 
@@ -84,6 +85,16 @@ export const convertToGeoJSON = (
         )
       );
 
+      // Determine crash_type based on crash_types
+      let crash_type: "Pedestrian" | "Bicyclist" | "Motor Vehicle" =
+        "Motor Vehicle";
+
+      if (crash_types.includes("PEDESTRIAN")) {
+        crash_type = "Pedestrian";
+      } else if (crash_types.includes("BICYCLIST")) {
+        crash_type = "Bicyclist";
+      }
+
       return {
         type: "Feature",
         id: report_number, // Assigning 'id' as string
@@ -98,6 +109,7 @@ export const convertToGeoJSON = (
           details: details, // Assigned as an array
           is_fatal: is_fatal, // Set based on injury_severity
           crash_types: crash_types, // Array of crash types
+          crash_type: crash_type, // New property
         },
       };
     }

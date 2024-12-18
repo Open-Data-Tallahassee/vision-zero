@@ -42,3 +42,5 @@ next-env.d.ts
 
 
 archive/
+src/components/Clustering/
+src/components/D3/
