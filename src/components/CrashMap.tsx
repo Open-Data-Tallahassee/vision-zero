@@ -132,16 +132,34 @@ const CrashMap = () => {
             handleToDateChange={setCrashToDate}
             handleFromDateChange={setCrashFromDate}
           />
-          <div className="italic">
-            Data updated as of:{" "}
-            {new Date(2023, 5).toLocaleDateString(undefined, {
-              month: "2-digit",
-              year: "numeric",
-            })}
-          </div>
+        </div>
+        <div className="py-3 text-lg italic">
+          Data updated as of:{" "}
+          {new Date(2023, 5).toLocaleDateString(undefined, {
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </div>
+        <div className="text-lg italic">
+          <ul className="">
+            <li className="flex items-center">
+              <span className="w-3 h-3 rounded-full bg-[#C4291D] mr-2"></span>
+              Pedestrian crash
+            </li>
+            <li className="flex items-center">
+              <span className="w-3 h-3 rounded-full bg-[#F5AE3D] mr-2"></span>
+              Bicyclist crash
+            </li>
+            <li className="flex items-center">
+              <span className="w-3 h-3 rounded-full bg-[#3C90E2] mr-2"></span>
+              Motor vehicle crash
+            </li>
+          </ul>
         </div>
       </div>
-      {visibleData && <Map data={visibleData} />}
+      <div className="w-full h-full px-12 pb-4 md:p-0 md:pb-0">
+        {visibleData && <Map data={visibleData} />}
+      </div>
     </div>
   );
 };

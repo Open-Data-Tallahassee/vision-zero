@@ -19,7 +19,7 @@ const CrashType = (props: CrashTypeProps) => {
         <FaCar />
       </Button>
       <Button
-        className={`w-full py-1 rounded-none border border-x-0 border-blue-500 ${
+        className={`w-full py-1 rounded-none border border border-blue-500 ${
           props.selectedOption === "PEDESTRIAN"
             ? "bg-blue-500 text-white"
             : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
@@ -29,7 +29,7 @@ const CrashType = (props: CrashTypeProps) => {
         <FaStreetView />
       </Button>
       <Button
-        className={`w-full py-1 rounded-none border border-x-0 border-blue-500 ${
+        className={`w-full py-1 rounded-none border border-l-0 border-blue-500 ${
           props.selectedOption === "BICYCLIST"
             ? "bg-blue-500 text-white"
             : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
