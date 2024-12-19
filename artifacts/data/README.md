@@ -1,2 +1,0 @@
-# Source
-This data is derived from the [Florida Department of Highway Safety and Motor Vehicles (FLHSMV)](https://www.flhsmv.gov/traffic-crash-reports/crash-dashboard/) repository for crash reports for the years 2010-2021.
