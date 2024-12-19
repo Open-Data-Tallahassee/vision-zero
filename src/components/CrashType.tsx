@@ -2,48 +2,48 @@ interface CrashTypeProps {
   selectedOption: string;
   handleOptionClick: (option: string) => void;
 }
-
 import { Button } from "@/components/ui/button";
+import { FaBicycle, FaCar, FaStreetView } from "react-icons/fa";
 
 const CrashType = (props: CrashTypeProps) => {
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="w-full flex justify-between h-9 ">
       <Button
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
+        className={`w-full py-1 rounded-none rounded-l-sm border border-r-0 border-blue-500 ${
           props.selectedOption === "MOTOR VEHICLE"
             ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
+            : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
         }`}
         onClick={() => props.handleOptionClick("MOTOR VEHICLE")}
       >
-        Motor Vehicle
+        <FaCar />
       </Button>
       <Button
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
+        className={`w-full py-1 rounded-none border border-x-0 border-blue-500 ${
           props.selectedOption === "PEDESTRIAN"
             ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
+            : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
         }`}
         onClick={() => props.handleOptionClick("PEDESTRIAN")}
       >
-        Pedestrian
+        <FaStreetView />
       </Button>
       <Button
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
+        className={`w-full py-1 rounded-none border border-x-0 border-blue-500 ${
           props.selectedOption === "BICYCLIST"
             ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
+            : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
         }`}
         onClick={() => props.handleOptionClick("BICYCLIST")}
       >
-        Bicyclist
+        <FaBicycle style={{ width: "24px", height: "24px" }} />
       </Button>
       <Button
         size="default"
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
+        className={`w-full py-1 rounded-none rounded-r-sm border border-l-0 border-blue-500 ${
           props.selectedOption === "ALL"
             ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
+            : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
         }`}
         onClick={() => props.handleOptionClick("ALL")}
       >

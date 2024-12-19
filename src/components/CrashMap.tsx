@@ -20,8 +20,8 @@ const CrashMap = () => {
     "ALL" | "MOTOR VEHICLE" | "PEDESTRIAN" | "BICYCLIST"
   >("ALL");
   const [crashSeverityOption, setCrashSeverityOption] = useState<
-    "ALL" | "FATAL" | "INJURY"
-  >("ALL");
+    "FATAL" | "INJURY"
+  >("INJURY");
   const [crashFromDate, setCrashFromDate] = useState<Date>(new Date(2019, 3)); // June 1, 2019
   const [crashToDate, setCrashToDate] = useState<Date>(new Date(2019, 5, 30));
   const [crashData, setCrashData] = useState<CrashData[] | null>(null);
@@ -110,8 +110,8 @@ const CrashMap = () => {
   return (
     <div className="flex flex-col md:flex-row ">
       <div className="col-lg-4 py-3 px-4">
-        {/* <div className="text-xl font-bold py-3">FILTER CRASHES</div> */}
-        <div className="w-full space-y-5">
+        <div className="text-xl font-bold py-3">FILTER CRASHES</div>
+        <div className="w-full space-y-2">
           <CrashType
             selectedOption={crashTypeOption}
             handleOptionClick={(option: string) =>
@@ -123,7 +123,7 @@ const CrashMap = () => {
           <CrashSeverity
             selectedOption={crashSeverityOption}
             handleOptionClick={(option: string) =>
-              setCrashSeverityOption(option as "INJURY" | "FATAL" | "ALL")
+              setCrashSeverityOption(option as "INJURY" | "FATAL")
             }
           />
           <CrashDate
@@ -133,7 +133,11 @@ const CrashMap = () => {
             handleFromDateChange={setCrashFromDate}
           />
           <div className="italic">
-            Data updated as of: {new Date(2023, 5, 12).toLocaleDateString()}
+            Data updated as of:{" "}
+            {new Date(2023, 5).toLocaleDateString(undefined, {
+              month: "2-digit",
+              year: "numeric",
+            })}
           </div>
         </div>
       </div>

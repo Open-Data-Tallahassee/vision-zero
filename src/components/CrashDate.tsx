@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 const CrashDate = (props: CrashDateFilterProps) => {
   return (
     <div className="flex flex-col">
-      <label htmlFor="from_date" className="text-sm">
+      <label htmlFor="from_date" className="text-lg font-bold">
         Start Date:
       </label>
       {/* <input
@@ -29,7 +29,7 @@ const CrashDate = (props: CrashDateFilterProps) => {
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
-            className="w-[240px] pl-3 text-left font-normal"
+            className="w-full pl-3 text-left font-normal"
           >
             {props.fromDate ? (
               format(props.fromDate, "PPP")
@@ -53,7 +53,7 @@ const CrashDate = (props: CrashDateFilterProps) => {
         </PopoverContent>
       </Popover>
 
-      <label htmlFor="to_date" className="text-sm mt-2">
+      <label htmlFor="to_date" className="text-lg font-bold mt-2">
         End Date:
       </label>
       {/* <input
@@ -68,7 +68,7 @@ const CrashDate = (props: CrashDateFilterProps) => {
         <PopoverTrigger asChild>
           <Button
             variant={"outline"}
-            className="w-[240px] pl-3 text-left font-normal"
+            className="w-full pl-3 text-left font-normal"
           >
             {props.toDate ? (
               format(props.toDate, "PPP")

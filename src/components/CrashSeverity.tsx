@@ -7,36 +7,26 @@ import { Button } from "@/components/ui/button";
 
 const CrashSeverity = (props: CrashTypeProps) => {
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="w-full flex justify-between">
       <Button
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
+        className={`w-full h-9 text-lg px-3 py-2 rounded-none rounded-l-sm border border-r-0 border-blue-500  ${
           props.selectedOption === "INJURY"
             ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
+            : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
         }`}
         onClick={() => props.handleOptionClick("INJURY")}
       >
-        Injury
+        INJURIES
       </Button>
       <Button
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
+        className={`w-full h-9 text-lg px-3 py-2 rounded-none rounded-r-sm border border-l-0 border-blue-500 ${
           props.selectedOption === "FATAL"
             ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
+            : "bg-white text-blue-500 hover:bg-blue-500 hover:text-white"
         }`}
         onClick={() => props.handleOptionClick("FATAL")}
       >
-        Fatal
-      </Button>
-      <Button
-        className={`flex text-xs px-3 py-1 rounded-none h-7 ${
-          props.selectedOption === "ALL"
-            ? "bg-blue-500 text-white"
-            : "bg-white text-black hover:bg-blue-500 hover:text-white"
-        }`}
-        onClick={() => props.handleOptionClick("ALL")}
-      >
-        ALL
+        FATALITIES
       </Button>
     </div>
   );
