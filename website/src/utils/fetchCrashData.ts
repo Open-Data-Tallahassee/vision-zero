@@ -9,7 +9,7 @@ import { CrashData } from "./csvToGeoJSON";
  */
 export const getLeonCountyCrashData = async (): Promise<CrashData[] | null> => {
   const csvURL =
-    "https://raw.githubusercontent.com/Open-Data-Tallahassee/vision-zero/41-first-map/crash-data/quarterly-tranches/processed/leon-people-2019-q2.csv";
+    "https://raw.githubusercontent.com/Open-Data-Tallahassee/vision-zero/41-first-map/data/quarterly-tranches/leon-people-2019-q2.csv";
 
   try {
     const response = await fetch(csvURL);
