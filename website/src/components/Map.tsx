@@ -1,15 +1,21 @@
-interface MapProps {
-  data: GeoJSONFeatureCollection;
-}
-
-import { GeoJSONFeatureCollection } from "@/utils/csvToGeoJSON";
-import mapboxgl, { GeoJSONSource } from "mapbox-gl";
+import { updateLayerFilters } from "@/utils/mapConfig";
+import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useEffect, useRef } from "react";
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_REACT_APP_MAPBOX_TOKEN || "";
 
-const Map = (props: MapProps) => {
+const Map = ({
+  crashSeverityOption,
+  crashTypeOption,
+  crashFromDate,
+  crashToDate,
+}: {
+  crashSeverityOption: string;
+  crashTypeOption: string;
+  crashFromDate?: Date;
+  crashToDate?: Date;
+}) => {
   const mapContainer = useRef(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
 
@@ -18,7 +24,7 @@ const Map = (props: MapProps) => {
   const initZoom = 11.53;
 
   useEffect(() => {
-    if (mapRef.current) return; // initialize map only once
+    if (mapRef.current) return; // Initialize map only once
     mapRef.current = new mapboxgl.Map({
       container: mapContainer.current || "",
       style: "mapbox://styles/benji-develops/cm4rnea8l00cm01r07kbv2iwa",
@@ -27,15 +33,12 @@ const Map = (props: MapProps) => {
       zoom: initZoom,
     });
 
-    // Add navigation controls
-    mapRef.current.addControl(new mapboxgl.NavigationControl());
-
     mapRef.current.on("load", () => {
       if (mapRef.current) {
-        // Add GeoJSON source
+        // Add ArcGIS Feature Layer as a GeoJSON source
         mapRef.current.addSource("crashData", {
           type: "geojson",
-          data: props.data,
+          data: `https://services8.arcgis.com/QWMg3JYJpicIkfeO/arcgis/rest/services/leon_people_2019_q2/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson&token=${process.env.NEXT_PUBLIC_ARCGIS_TOKEN}`,
         });
 
         mapRef.current.addLayer({
@@ -65,9 +68,13 @@ const Map = (props: MapProps) => {
           const feature = features && features[0];
           if (feature) {
             const coordinates = (feature.geometry as any).coordinates.slice();
-            const report_number = feature.id;
+            const report_number = feature.properties.report_number;
             const crash_year = feature.properties.crash_year;
-            const crash_date_time = feature.properties.crash_date_time;
+            // Convert timestamp to date and time
+            const crash_date_time = new Date(
+              feature.properties.crash_date_time
+            ).toLocaleString();
+
             const vehicle_number = feature.properties.vehicles_involved;
             const person_number = feature.properties.people_involved;
 
@@ -97,32 +104,26 @@ const Map = (props: MapProps) => {
         });
       }
     });
+  }, []);
 
-    // Cleanup on unmount
-    // return () => {
-    //   if (mapRef.current) mapRef.current.remove();
-    // };
-  }, [props.data]);
-
-  // Listen for data prop changes and update the GeoJSON source
   useEffect(() => {
-    if (mapRef.current && mapRef.current.getSource("crashData")) {
-      const source = mapRef.current.getSource("crashData") as GeoJSONSource;
-      source.setData(props.data);
+    if (mapRef.current) {
+      updateLayerFilters(
+        mapRef.current,
+        "crashPoints",
+        crashSeverityOption,
+        crashTypeOption,
+        crashFromDate,
+        crashToDate
+      );
     }
-  }, [props.data]);
+  }, [crashSeverityOption, crashTypeOption, crashFromDate, crashToDate]);
 
   return (
-    <div className="w-full h-full">
-      {/* <div className="bg-[rgba(35, 55, 75, 0.9)]">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {initZoom}
-      </div> */}
-      <div
-        ref={mapContainer}
-        className="map-container h-[calc(100vh_-_140px)] w-full relative"
-        // className={`map-container h-[calc(100vh_-_${180}px)] w-full relative`}
-      />
-    </div>
+    <div
+      ref={mapContainer}
+      className="map-container h-[calc(100vh_-_140px)] w-full relative"
+    />
   );
 };
 

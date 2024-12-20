@@ -1,16 +1,12 @@
 "use client";
 
-import { GeoJSONFeatureCollection } from "@/utils/csvToGeoJSON";
-import { getLeonCountyCrashDataGeoJSON } from "@/utils/fetchCrashDataGeojson";
-import { endOfDay, startOfDay } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CrashDate from "./CrashDate";
 import CrashSeverity from "./CrashSeverity";
 import CrashType from "./CrashType";
 import Map from "./Map";
 
 const CrashMap = () => {
-  const [visibleData, setVisibleData] = useState(null);
   const [crashTypeOption, setCrashTypeOption] = useState<
     "ALL" | "MOTOR VEHICLE" | "PEDESTRIAN" | "BICYCLIST"
   >("ALL");
@@ -19,80 +15,6 @@ const CrashMap = () => {
   >("INJURY");
   const [crashFromDate, setCrashFromDate] = useState<Date>(new Date(2019, 3)); // June 1, 2019
   const [crashToDate, setCrashToDate] = useState<Date>(new Date(2019, 5, 30));
-  const [crashData, setCrashData] = useState(null);
-
-  // const crashData = getLeonCountyCrashData();
-
-  // Fetch and convert data on component mount
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getLeonCountyCrashDataGeoJSON();
-      if (data) {
-        setCrashData(data);
-        setVisibleData(data);
-      } else {
-        console.log("Failed to load crash data.");
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // Update the map source data based on the filter
-  useEffect(() => {
-    if (crashData) {
-      let filteredFeatures = crashData.features;
-
-      if (crashSeverityOption === "FATAL") {
-        filteredFeatures = crashData.features.filter(
-          (feature) => feature.properties.is_fatal
-        );
-      } else if (crashSeverityOption === "INJURY") {
-        filteredFeatures = crashData.features.filter(
-          (feature) => !feature.properties.is_fatal
-        );
-      }
-
-      // Filter by Crash Type
-      if (crashTypeOption !== "ALL") {
-        filteredFeatures = filteredFeatures.filter((feature) =>
-          feature.properties.crash_types.includes(crashTypeOption)
-        );
-      }
-
-      // Filter by Date Range
-      if (crashFromDate || crashToDate) {
-        const start = crashFromDate
-          ? startOfDay(crashFromDate)
-          : new Date(-8640000000000000); // Minimum Date
-        const end = crashToDate
-          ? endOfDay(crashToDate)
-          : new Date(8640000000000000); // Maximum Date
-
-        filteredFeatures = filteredFeatures.filter((feature) => {
-          const crashDate = new Date(feature.properties.crash_date_time);
-          return crashDate >= start && crashDate <= end;
-        });
-      }
-
-      const filteredGeoJSON: GeoJSONFeatureCollection = {
-        type: "FeatureCollection",
-        features: filteredFeatures,
-      };
-
-      setVisibleData(filteredGeoJSON);
-    }
-  }, [
-    crashSeverityOption,
-    crashTypeOption,
-    crashData,
-    crashFromDate,
-    crashToDate,
-  ]);
-
-  if (!crashData) {
-    return <pre>Loading...</pre>;
-  }
 
   return (
     <div className="flex flex-col md:flex-row ">
@@ -145,7 +67,12 @@ const CrashMap = () => {
         </div>
       </div>
       <div className="w-full h-full px-12 pb-4 md:p-0 md:pb-0">
-        {visibleData && <Map data={visibleData} />}
+        <Map
+          crashSeverityOption={crashSeverityOption}
+          crashTypeOption={crashTypeOption}
+          crashFromDate={crashFromDate}
+          crashToDate={crashToDate}
+        />
       </div>
     </div>
   );
