@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  convertToGeoJSON,
-  CrashData,
-  GeoJSONFeatureCollection,
-} from "@/utils/csvToGeoJSON";
-import { getLeonCountyCrashData } from "@/utils/fetchCrashData";
+import { GeoJSONFeatureCollection } from "@/utils/csvToGeoJSON";
+import { getLeonCountyCrashDataGeoJSON } from "@/utils/fetchCrashDataGeojson";
 import { endOfDay, startOfDay } from "date-fns";
 import { useEffect, useState } from "react";
 import CrashDate from "./CrashDate";
@@ -14,8 +10,7 @@ import CrashType from "./CrashType";
 import Map from "./Map";
 
 const CrashMap = () => {
-  const [visibleData, setVisibleData] =
-    useState<GeoJSONFeatureCollection | null>(null);
+  const [visibleData, setVisibleData] = useState(null);
   const [crashTypeOption, setCrashTypeOption] = useState<
     "ALL" | "MOTOR VEHICLE" | "PEDESTRIAN" | "BICYCLIST"
   >("ALL");
@@ -24,16 +19,17 @@ const CrashMap = () => {
   >("INJURY");
   const [crashFromDate, setCrashFromDate] = useState<Date>(new Date(2019, 3)); // June 1, 2019
   const [crashToDate, setCrashToDate] = useState<Date>(new Date(2019, 5, 30));
-  const [crashData, setCrashData] = useState<CrashData[] | null>(null);
+  const [crashData, setCrashData] = useState(null);
 
   // const crashData = getLeonCountyCrashData();
 
   // Fetch and convert data on component mount
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getLeonCountyCrashData();
+      const data = await getLeonCountyCrashDataGeoJSON();
       if (data) {
         setCrashData(data);
+        setVisibleData(data);
       } else {
         console.log("Failed to load crash data.");
       }
@@ -42,26 +38,17 @@ const CrashMap = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // Flatten the data into GeoJSON
-    if (crashData) {
-      const geojson = convertToGeoJSON(crashData);
-      setVisibleData(geojson);
-    }
-  }, [crashData]);
-
   // Update the map source data based on the filter
   useEffect(() => {
     if (crashData) {
-      const geojson = convertToGeoJSON(crashData);
-      let filteredFeatures = geojson.features;
+      let filteredFeatures = crashData.features;
 
       if (crashSeverityOption === "FATAL") {
-        filteredFeatures = geojson.features.filter(
+        filteredFeatures = crashData.features.filter(
           (feature) => feature.properties.is_fatal
         );
       } else if (crashSeverityOption === "INJURY") {
-        filteredFeatures = geojson.features.filter(
+        filteredFeatures = crashData.features.filter(
           (feature) => !feature.properties.is_fatal
         );
       }

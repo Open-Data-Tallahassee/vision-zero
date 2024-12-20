@@ -65,37 +65,20 @@ const Map = (props: MapProps) => {
           const feature = features && features[0];
           if (feature) {
             const coordinates = (feature.geometry as any).coordinates.slice();
-            const { report_number, crash_year, crash_date_time, details } =
-              feature.properties as {
-                report_number: string;
-                crash_year: string;
-                crash_date_time: string;
-                details: string;
-              };
+            const report_number = feature.id;
+            const crash_year = feature.properties.crash_year;
+            const crash_date_time = feature.properties.crash_date_time;
+            const vehicle_number = feature.properties.vehicles_involved;
+            const person_number = feature.properties.people_involved;
 
             // Create HTML content for the popup
             let popupContent = `
                         <strong>Report Number:</strong> ${report_number}<br/>
                         <strong>Year:</strong> ${crash_year}<br/>
                         <strong>Date & Time:</strong> ${crash_date_time}<br/>
-                        <strong>Details:</strong><ul>
+                        <strong>Vehicles Involved:</strong> ${vehicle_number}<br/>
+                        <strong>People Involved:</strong> ${person_number}<br/>
                       `;
-
-            JSON.parse(details).forEach((loc: any) => {
-              popupContent += `
-                          <li>
-                            <strong>Role:</strong> ${loc.role}<br/>
-                            <strong>Injury Severity:</strong> ${
-                              loc.injury_severity
-                            }<br/>
-                            <strong>Non-Motorist Description Code:</strong> ${
-                              loc.non_motorist_description_code || "N/A"
-                            }
-                          </li>
-                        `;
-            });
-
-            popupContent += `</ul>`;
 
             new mapboxgl.Popup()
               .setLngLat(coordinates)
