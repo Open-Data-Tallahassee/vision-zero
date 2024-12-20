@@ -79,7 +79,7 @@ const Map = ({
             const person_number = feature.properties.people_involved;
 
             // Create HTML content for the popup
-            let popupContent = `
+            const popupContent = `
                         <strong>Report Number:</strong> ${report_number}<br/>
                         <strong>Year:</strong> ${crash_year}<br/>
                         <strong>Date & Time:</strong> ${crash_date_time}<br/>
