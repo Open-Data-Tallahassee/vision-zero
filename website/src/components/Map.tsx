@@ -6,11 +6,13 @@ import { useEffect, useRef } from "react";
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_REACT_APP_MAPBOX_TOKEN || "";
 
 const Map = ({
+  crashData,
   crashSeverityOption,
   crashTypeOption,
   crashFromDate,
   crashToDate,
 }: {
+  crashData: any;
   crashSeverityOption: string;
   crashTypeOption: string;
   crashFromDate?: Date;
@@ -25,61 +27,65 @@ const Map = ({
 
   useEffect(() => {
     if (mapRef.current) return; // Initialize map only once
-    mapRef.current = new mapboxgl.Map({
-      container: mapContainer.current || "",
-      style: "mapbox://styles/benji-develops/cm4rnea8l00cm01r07kbv2iwa",
-      center: [lng, lat],
-      minZoom: 10,
-      zoom: initZoom,
-    });
 
-    mapRef.current.on("load", () => {
-      if (mapRef.current) {
-        // Add ArcGIS Feature Layer as a GeoJSON source
-        mapRef.current.addSource("crashData", {
-          type: "geojson",
-          data: `https://services8.arcgis.com/QWMg3JYJpicIkfeO/arcgis/rest/services/leon_people_2019_q2/FeatureServer/0/query?where=1%3D1&outFields=*&f=geojson&token=${process.env.NEXT_PUBLIC_ARCGIS_TOKEN}`,
-        });
+    const initMap = () => {
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainer.current || "",
+        style: "mapbox://styles/benji-develops/cm4rnea8l00cm01r07kbv2iwa",
+        center: [lng, lat],
+        minZoom: 10,
+        zoom: initZoom,
+      });
 
-        mapRef.current.addLayer({
-          id: "crashPoints",
-          type: "circle",
-          source: "crashData",
-          paint: {
-            "circle-radius": 6,
-            "circle-color": [
-              "match",
-              ["get", "crash_type"],
-              "Pedestrian",
-              "#C4291D", // Red for Pedestrian
-              "Bicyclist",
-              "#F5AE3D", // Yellow for Bicyclist
-              "#3C90E2", // Blue for Others
-            ],
-            "circle-opacity": 0.6,
-          },
-        });
+      mapRef.current.on("load", () => {
+        if (mapRef.current) {
+          // Add ArcGIS Feature Layer as a GeoJSON source
+          // const crashData = await getCachedCrashData();
 
-        // Add popups on click for crash points
-        mapRef.current.on("click", "crashPoints", (e) => {
-          const features = mapRef.current?.queryRenderedFeatures(e.point, {
-            layers: ["crashPoints"],
+          mapRef.current.addSource("crashData", {
+            type: "geojson",
+            data: crashData,
           });
-          const feature = features && features[0];
-          if (feature) {
-            const coordinates = (feature.geometry as any).coordinates.slice();
-            const report_number = feature.properties.report_number;
-            const crash_year = feature.properties.crash_year;
-            // Convert timestamp to date and time
-            const crash_date_time = new Date(
-              feature.properties.crash_date_time
-            ).toLocaleString();
 
-            const vehicle_number = feature.properties.vehicles_involved;
-            const person_number = feature.properties.people_involved;
+          mapRef.current.addLayer({
+            id: "crashPoints",
+            type: "circle",
+            source: "crashData",
+            paint: {
+              "circle-radius": 6,
+              "circle-color": [
+                "match",
+                ["get", "crash_type"],
+                "Pedestrian",
+                "#C4291D", // Red for Pedestrian
+                "Bicyclist",
+                "#F5AE3D", // Yellow for Bicyclist
+                "#3C90E2", // Blue for Others
+              ],
+              "circle-opacity": 0.6,
+            },
+          });
 
-            // Create HTML content for the popup
-            const popupContent = `
+          // Add popups on click for crash points
+          mapRef.current.on("click", "crashPoints", (e) => {
+            const features = mapRef.current?.queryRenderedFeatures(e.point, {
+              layers: ["crashPoints"],
+            });
+            const feature = features && features[0];
+            if (feature) {
+              const coordinates = (feature.geometry as any).coordinates.slice();
+              const report_number = feature.properties.report_number;
+              const crash_year = feature.properties.crash_year;
+              // Convert timestamp to date and time
+              const crash_date_time = new Date(
+                feature.properties.crash_date_time
+              ).toLocaleString();
+
+              const vehicle_number = feature.properties.vehicles_involved;
+              const person_number = feature.properties.people_involved;
+
+              // Create HTML content for the popup
+              const popupContent = `
                         <strong>Report Number:</strong> ${report_number}<br/>
                         <strong>Year:</strong> ${crash_year}<br/>
                         <strong>Date & Time:</strong> ${crash_date_time}<br/>
@@ -87,23 +93,25 @@ const Map = ({
                         <strong>People Involved:</strong> ${person_number}<br/>
                       `;
 
-            new mapboxgl.Popup()
-              .setLngLat(coordinates)
-              .setHTML(popupContent)
-              .addTo(mapRef.current!);
-          }
-        });
+              new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(popupContent)
+                .addTo(mapRef.current!);
+            }
+          });
 
-        // Change the cursor to a pointer when over the points
-        mapRef.current.on("mouseenter", "crashPoints", () => {
-          mapRef.current?.getCanvas().style.setProperty("cursor", "pointer");
-        });
+          // Change the cursor to a pointer when over the points
+          mapRef.current.on("mouseenter", "crashPoints", () => {
+            mapRef.current?.getCanvas().style.setProperty("cursor", "pointer");
+          });
 
-        mapRef.current.on("mouseleave", "crashPoints", () => {
-          mapRef.current?.getCanvas().style.setProperty("cursor", "");
-        });
-      }
-    });
+          mapRef.current.on("mouseleave", "crashPoints", () => {
+            mapRef.current?.getCanvas().style.setProperty("cursor", "");
+          });
+        }
+      });
+    };
+    initMap();
   }, []);
 
   useEffect(() => {

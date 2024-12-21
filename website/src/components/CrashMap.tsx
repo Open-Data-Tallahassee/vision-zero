@@ -6,7 +6,7 @@ import CrashSeverity from "./CrashSeverity";
 import CrashType from "./CrashType";
 import Map from "./Map";
 
-const CrashMap = () => {
+const CrashMap = (props: any) => {
   const [crashTypeOption, setCrashTypeOption] = useState<
     "ALL" | "MOTOR VEHICLE" | "PEDESTRIAN" | "BICYCLIST"
   >("ALL");
@@ -68,6 +68,7 @@ const CrashMap = () => {
       </div>
       <div className="w-full h-full px-12 pb-4 md:p-0 md:pb-0">
         <Map
+          crashData={props.crashData}
           crashSeverityOption={crashSeverityOption}
           crashTypeOption={crashTypeOption}
           crashFromDate={crashFromDate}
