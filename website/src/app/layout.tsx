@@ -13,6 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  title: "Vision Zero TLH",
+  description:
+    "Tracking and visualizing traffic accidents, injuries, and fatalities in Tallahassee, FL",
   openGraph: {
     title: "Vision Zero TLH",
     description:
@@ -22,8 +25,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://open-tallahassee.s3.us-east-1.amazonaws.com/Vision-Zero-logo-transparent-2.png", // Must be an absolute URL
-        width: 800,
-        height: 600,
+        width: 500,
+        height: 500,
       },
     ],
     locale: "en_US",
