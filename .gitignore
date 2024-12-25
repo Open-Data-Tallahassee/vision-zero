@@ -45,3 +45,5 @@ archive/
 **src/components/Clustering/
 **src/components/D3/
 data/images
+data/2021-q2/
+data/leon-county-events-2010-2021.csv

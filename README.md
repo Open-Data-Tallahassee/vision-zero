@@ -42,6 +42,118 @@ This query is designed to merge data from multiple tables related to traffic inc
 
 This query allows analysts to examine detailed information about traffic incidents in **Leon County** by combining role-specific data with incident-level details. It is particularly useful for understanding the involvement and impact on different types of participants (drivers, passengers, and non-motorists) in traffic events.
 
+## Methodology for Generating GeoJSON Features from Crash Data
+
+This process involves transforming grouped traffic crash data into GeoJSON features, where each feature represents a unique crash event with its location and associated attributes. The methodology ensures that spatial and descriptive information is accurately captured for visualization and analysis.
+
+1.  Data Preparation
+
+    Each crash is grouped by its unique report_number. Within each group, individual records provide details about participants involved, such as crash type, injury severity, and the total number of vehicles and people.
+
+    - Spatial Information: The latitude and longitude from the first record in the group are used to define the crash's geographical location.
+
+    - Temporal Information: Crash year and the exact date/time are also extracted from the first record to establish a timeline.
+
+    Crashes without valid latitude or longitude are excluded to ensure spatial data accuracy.
+
+2.  Crash Type Classification
+
+    Crash types are determined by analyzing participant-level details:
+
+    - Each participant is classified as "MOTOR VEHICLE," "PEDESTRIAN," or "BICYCLIST" based on their role and non_motorist_description_code.
+
+    - The crash's overall classification is derived from the set of participant types:
+      - If any participant is a pedestrian, the crash is classified as "Pedestrian."
+      - If any participant is a bicyclist, the crash is classified as "Bicyclist."
+      - Otherwise, the crash is categorized as "Motor Vehicle."
+
+3.  Determining Fatality
+
+    A crash is flagged as fatal if at least one participant has an injury severity indicating a fatality. This is determined by checking the injury severity values across all participants.
+
+4.  Aggregating Participant Data
+
+    To provide a concise summary of the crash, total counts for vehicles and people involved are directly retrieved from the data:
+
+    - total_number_of_vehicles: Represents the number of vehicles involved in the crash.
+    - total_number_of_persons: Reflects the number of people involved.
+      These totals are used to convey the scale of the incident.
+
+5.  GeoJSON Feature Creation
+    For each crash, a GeoJSON feature is generated with the following structure:
+
+    - Geometry:
+      - A Point object that specifies the crash's location using longitude and latitude coordinates.
+    - Properties:
+      - Temporal details, such as crash year and date/time.
+      - Attributes, including whether the crash was fatal (is_fatal), its overall classification (crash_type), and a list of all crash types involved (crash_types).
+      - Aggregate counts of vehicles and people involved.
+
+### Query
+
+```
+-- Combine driver, passenger, and non-motorist tables
+WITH combined_roles AS (
+    SELECT
+        report_number,
+        vehicle_number,
+        person_number,
+        injury_severity,
+        0 AS non_motorist_description_code, -- Placeholder for non_motorist data
+        'D' AS role
+    FROM non_redacted_driver
+
+    UNION ALL
+
+    SELECT
+        report_number,
+        vehicle_number,
+        person_number,
+        injury_severity,
+        0 AS non_motorist_description_code, -- Placeholder for non_motorist data
+        'P' AS role
+    FROM non_redacted_passenger
+
+    UNION ALL
+
+    SELECT
+        report_number,
+        NULL AS vehicle_number, -- non_motorist does not have vehicle_number
+        person_number,
+        injury_severity,
+        non_motorist_description_code,
+        'N' AS role
+    FROM non_redacted_non_motorist
+)
+
+-- Join the combined table with the main query
+SELECT
+    e.report_number,
+    e.crash_year,
+    e.crash_date_time,
+    e.total_number_of_vehicles,
+    e.total_number_of_persons,
+    e.latitude,
+    e.longitude,
+    cr.vehicle_number,
+    cr.person_number,
+    cr.injury_severity,
+    cr.non_motorist_description_code,
+    cr.role
+FROM
+    "2021_q2".non_redacted_event e
+JOIN
+    combined_roles cr
+ON
+    e.report_number = cr.report_number
+WHERE
+    e.county_code = 13;
+```
+
+### Purpose
+
+The methodology captures both spatial and descriptive aspects of traffic crash data, transforming raw participant-level information into a cohesive and standardized format. This GeoJSON structure is ideal for use in geographic visualizations, enabling insights into crash patterns, severity, and types across different locations and timeframes.
+
 ## Resources
 
 ### data sources
