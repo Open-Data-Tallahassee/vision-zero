@@ -45,5 +45,6 @@ archive/
 **src/components/Clustering/
 **src/components/D3/
 data/images
-data/2021-q2/
 data/leon-county-events-2010-2021.csv
+data/leon-county-crashes/2020/raw/
+data/leon-county-crashes/2021-q1-and-q2/raw/
