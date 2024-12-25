@@ -38,57 +38,6 @@ This query is designed to merge data from multiple tables related to traffic inc
    - The resulting dataset includes key incident details (`crash_year`, `crash_date_time`, `latitude`, `longitude`, etc.) along with participant-specific details such as `vehicle_number`, `person_number`, `injury_severity`, and `role`.
    - The `non_motorist_description_code` is included where applicable.
 
-### Purpose
-
-This query allows analysts to examine detailed information about traffic incidents in **Leon County** by combining role-specific data with incident-level details. It is particularly useful for understanding the involvement and impact on different types of participants (drivers, passengers, and non-motorists) in traffic events.
-
-## Methodology for Generating GeoJSON Features from Crash Data
-
-This process involves transforming grouped traffic crash data into GeoJSON features, where each feature represents a unique crash event with its location and associated attributes. The methodology ensures that spatial and descriptive information is accurately captured for visualization and analysis.
-
-1.  Data Preparation
-
-    Each crash is grouped by its unique report_number. Within each group, individual records provide details about participants involved, such as crash type, injury severity, and the total number of vehicles and people.
-
-    - Spatial Information: The latitude and longitude from the first record in the group are used to define the crash's geographical location.
-
-    - Temporal Information: Crash year and the exact date/time are also extracted from the first record to establish a timeline.
-
-    Crashes without valid latitude or longitude are excluded to ensure spatial data accuracy.
-
-2.  Crash Type Classification
-
-    Crash types are determined by analyzing participant-level details:
-
-    - Each participant is classified as "MOTOR VEHICLE," "PEDESTRIAN," or "BICYCLIST" based on their role and non_motorist_description_code.
-
-    - The crash's overall classification is derived from the set of participant types:
-      - If any participant is a pedestrian, the crash is classified as "Pedestrian."
-      - If any participant is a bicyclist, the crash is classified as "Bicyclist."
-      - Otherwise, the crash is categorized as "Motor Vehicle."
-
-3.  Determining Fatality
-
-    A crash is flagged as fatal if at least one participant has an injury severity indicating a fatality. This is determined by checking the injury severity values across all participants.
-
-4.  Aggregating Participant Data
-
-    To provide a concise summary of the crash, total counts for vehicles and people involved are directly retrieved from the data:
-
-    - total_number_of_vehicles: Represents the number of vehicles involved in the crash.
-    - total_number_of_persons: Reflects the number of people involved.
-      These totals are used to convey the scale of the incident.
-
-5.  GeoJSON Feature Creation
-    For each crash, a GeoJSON feature is generated with the following structure:
-
-    - Geometry:
-      - A Point object that specifies the crash's location using longitude and latitude coordinates.
-    - Properties:
-      - Temporal details, such as crash year and date/time.
-      - Attributes, including whether the crash was fatal (is_fatal), its overall classification (crash_type), and a list of all crash types involved (crash_types).
-      - Aggregate counts of vehicles and people involved.
-
 ### Query
 
 ```
@@ -149,6 +98,57 @@ ON
 WHERE
     e.county_code = 13;
 ```
+
+### Purpose
+
+This query allows analysts to examine detailed information about traffic incidents in **Leon County** by combining role-specific data with incident-level details. It is particularly useful for understanding the involvement and impact on different types of participants (drivers, passengers, and non-motorists) in traffic events.
+
+## Methodology for Generating GeoJSON Features from Crash Data
+
+This process involves transforming grouped traffic crash data into GeoJSON features, where each feature represents a unique crash event with its location and associated attributes. The methodology ensures that spatial and descriptive information is accurately captured for visualization and analysis.
+
+1.  Data Preparation
+
+    Each crash is grouped by its unique report_number. Within each group, individual records provide details about participants involved, such as crash type, injury severity, and the total number of vehicles and people.
+
+    - Spatial Information: The latitude and longitude from the first record in the group are used to define the crash's geographical location.
+
+    - Temporal Information: Crash year and the exact date/time are also extracted from the first record to establish a timeline.
+
+    Crashes without valid latitude or longitude are excluded to ensure spatial data accuracy.
+
+2.  Crash Type Classification
+
+    Crash types are determined by analyzing participant-level details:
+
+    - Each participant is classified as "MOTOR VEHICLE," "PEDESTRIAN," or "BICYCLIST" based on their role and non_motorist_description_code.
+
+    - The crash's overall classification is derived from the set of participant types:
+      - If any participant is a pedestrian, the crash is classified as "Pedestrian."
+      - If any participant is a bicyclist, the crash is classified as "Bicyclist."
+      - Otherwise, the crash is categorized as "Motor Vehicle."
+
+3.  Determining Fatality
+
+    A crash is flagged as fatal if at least one participant has an injury severity indicating a fatality. This is determined by checking the injury severity values across all participants.
+
+4.  Aggregating Participant Data
+
+    To provide a concise summary of the crash, total counts for vehicles and people involved are directly retrieved from the data:
+
+    - total_number_of_vehicles: Represents the number of vehicles involved in the crash.
+    - total_number_of_persons: Reflects the number of people involved.
+      These totals are used to convey the scale of the incident.
+
+5.  GeoJSON Feature Creation
+    For each crash, a GeoJSON feature is generated with the following structure:
+
+    - Geometry:
+      - A Point object that specifies the crash's location using longitude and latitude coordinates.
+    - Properties:
+      - Temporal details, such as crash year and date/time.
+      - Attributes, including whether the crash was fatal (is_fatal), its overall classification (crash_type), and a list of all crash types involved (crash_types).
+      - Aggregate counts of vehicles and people involved.
 
 ### Purpose
 
