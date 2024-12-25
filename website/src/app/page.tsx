@@ -2,11 +2,11 @@
 import CrashMap from "@/components/CrashMap";
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
-import { getCachedCrashData } from "@/utils/fetchMapData";
+import combineMultipleYearQuarterData from "@/utils/combineYearQuarterData";
 
 export default async function Home() {
   console.log("Retrieving cached data..."); // Before calling getCachedCrashData
-  const crashData = await getCachedCrashData();
+  const crashData = await combineMultipleYearQuarterData();
   console.log("Data retrieved:", crashData.features?.length);
 
   return (
