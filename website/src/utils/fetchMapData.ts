@@ -1,5 +1,5 @@
 const fetchCrashDataPage = async (offset: number): Promise<any> => {
-  const baseUrl = `https://services8.arcgis.com/QWMg3JYJpicIkfeO/arcgis/rest/services/leon_people_2019_q2/FeatureServer/0/query`;
+  const baseUrl = `https://services8.arcgis.com/QWMg3JYJpicIkfeO/arcgis/rest/services/Leon_County_Crashes_2021_q1_and_q2/FeatureServer/0/query`;
   const token = process.env.NEXT_PUBLIC_ARCGIS_TOKEN;
   const pageSize = 2000; // Number of features per page
 

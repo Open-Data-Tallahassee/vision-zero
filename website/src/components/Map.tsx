@@ -66,6 +66,16 @@ const Map = ({
             },
           });
 
+          // Apply default filters immediately after map loads
+          updateLayerFilters(
+            mapRef.current,
+            "crashPoints",
+            crashSeverityOption,
+            crashTypeOption,
+            crashFromDate,
+            crashToDate
+          );
+
           // Add popups on click for crash points
           mapRef.current.on("click", "crashPoints", (e) => {
             const features = mapRef.current?.queryRenderedFeatures(e.point, {

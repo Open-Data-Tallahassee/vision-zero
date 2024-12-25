@@ -13,8 +13,10 @@ const CrashMap = (props: any) => {
   const [crashSeverityOption, setCrashSeverityOption] = useState<
     "FATAL" | "INJURY"
   >("INJURY");
-  const [crashFromDate, setCrashFromDate] = useState<Date>(new Date(2019, 3)); // June 1, 2019
-  const [crashToDate, setCrashToDate] = useState<Date>(new Date(2019, 5, 30));
+  const [crashFromDate, setCrashFromDate] = useState<Date>(
+    new Date(2021, 4, 1)
+  ); // default to 2021 Q1
+  const [crashToDate, setCrashToDate] = useState<Date>(new Date(2021, 5, 30));
 
   return (
     <div className="flex flex-col md:flex-row ">
