@@ -1,11 +1,51 @@
-*.ipynb_checkpoints
-leon-events.csv
-gsCredentials.json
-keys.yaml
-map/node_modules
-map/node_modules/*
-map/package-lock.json
-map/.cache
-map/public
-data/raw/*
-.DS_Store
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+**/node_modules
+**/.pnp
+**.pnp.*
+**.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+**/coverage
+
+# next.js
+**/.next/
+**/out/
+
+# production
+**/build
+
+# misc
+**.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+**.env*
+
+# vercel
+**.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+
+archive/
+**src/components/Clustering/
+**src/components/D3/
+data/images
+data/leon-county-events-2010-2021.csv
+data/leon-county-crashes/2020/raw/
+data/leon-county-crashes/2021-q1-and-q2/raw/
+vision-zero.code-workspace

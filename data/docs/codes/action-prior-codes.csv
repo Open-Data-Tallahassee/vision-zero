@@ -1,0 +1,12 @@
+code,description
+1,Crossing Roadway
+2,Waiting to Cross Roadway
+3,Walking/Cycling Along Roadway with Traffic (in or adjacent to travel lane)
+4,Walking/Cycling Along Roadway Against Traffic (in or adjacent to travel lane)
+5,Walking/Cycling on Sidewalk
+6,"In Roadway-Other (working, paying etc.)"
+7,"Adjacent to Roadway (e.g., shoulder, median)"
+8,Going to or from School (K-12)
+9,Working in Trafficway (incident response)
+10,None
+77,Other (Narrative may contain clarifying information)
