@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -41,24 +42,16 @@ const Navbar = () => {
       {isOpen && (
         <ul className="leading-loose text-blue-600">
           <li className="px-5 hover:text-red-500 border-b border-gray-400">
-            <a href="/" rel="noopener noreferrer">
-              VIEW THE MAP
-            </a>
+            <Link href="/">VIEW THE MAP</Link>
           </li>
           <li className="px-5 hover:text-red-500 border-b border-gray-400">
-            <a href="/" rel="noopener noreferrer">
-              GET CRASH DATA
-            </a>
+            <Link href="/">GET CRASH DATA</Link>
           </li>
           <li className="px-5 hover:text-red-500 border-b border-gray-400">
-            <a href="/" rel="noopener noreferrer">
-              GET FATALITY DATA
-            </a>
+            <Link href="/">GET FATALITY DATA</Link>
           </li>
           <li className="px-5 hover:text-red-500 border-b border-gray-400">
-            <a href="/" rel="noopener noreferrer">
-              ABOUT
-            </a>
+            <Link href="/about">ABOUT</Link>
           </li>
         </ul>
       )}
