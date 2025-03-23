@@ -8,8 +8,17 @@ export default async function About() {
       <Header />
       <Navbar />
       <div>
-        <div className=""> More about us</div>
-        <div></div>
+        <div className="">About this site</div>
+        <span>
+          Open Tallahassee is an open journalism project, powered by residents
+          who just want to keep their neighbors informed & connected - without
+          diving into the rabbit hole of political conspiracies or drama.
+        </span>
+        <span>
+          Open Tallahassee started at a Tallahassee coffee shop, where its
+          founding members talked about making a public map of traffic crashes,
+          this map.
+        </span>
       </div>
     </div>
   );
