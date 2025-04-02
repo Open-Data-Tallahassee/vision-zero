@@ -17,7 +17,7 @@ export default async function About() {
             >
               Open Tallahassee
             </a>
-            &nbsp; is an open journalism project, powered by residents who just
+            &nbsp;is an open journalism project, powered by residents who just
             want to keep their neighbors informed & connected - without diving
             into the rabbit hole of political conspiracies or drama.
           </span>
