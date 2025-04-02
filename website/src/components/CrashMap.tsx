@@ -51,6 +51,27 @@ const CrashMap = (props: any) => {
             year: "numeric",
           })}
         </div>
+        <div className="flex flex-col text-[10px] sm:w-64 gap-1 pt-1 pb-4">
+          <div>
+            Data from January 1, 2020 to June 30, 2021 can be displayed on the
+            map.
+          </div>
+          <div>
+            Help us display more data by donating{" "}
+            <a
+              href="https://www.opentlh.com/"
+              className="text-blue-500 hover:underline"
+            >
+              here
+            </a>
+            .
+          </div>
+
+          <div>
+            Crash data from the Florida Department of Highway Safety and Motor
+            Vehicles isn't freely accessible, unfortunately. .
+          </div>
+        </div>
         <div className="text-lg italic">
           <ul className="">
             <li className="flex items-center">
