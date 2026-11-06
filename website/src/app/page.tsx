@@ -57,7 +57,7 @@ export default async function Home() {
           </div>
           <div className="flex min-h-[44vw] flex-col justify-between gap-6 sm:min-h-0 bg-accent p-5 text-accent-ink sm:aspect-square lg:aspect-auto">
             <p className="text-[clamp(1.0625rem,0.9rem+0.8vw,1.5rem)] leading-snug">
-              {county.totals.fatalCrashes} of them killed at least one person. Vision Zero means no one.
+              {county.totals.fatalCrashes} of those Leon County crashes killed at least one person. Vision Zero means no one.
             </p>
             <Link href="/map?geo=leon&severity=fatal" className="self-start text-body underline decoration-2">
               Show fatal crashes

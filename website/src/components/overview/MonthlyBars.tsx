@@ -70,7 +70,7 @@ export default function MonthlyBars({ monthly }: { monthly: MonthlyByGeography }
             {fmt(total)}
           </p>
           <h2 id="by-month" className="mt-3 text-[clamp(1.375rem,1rem+1vw,1.75rem)] leading-tight">
-            {MEASURES[measure].label.toLowerCase()} in {geo === "leon" ? "Leon County" : "Tallahassee"}
+            {MEASURES[measure].label.toLowerCase()} in {geo === "leon" ? "Leon County" : "Tallahassee city limits"}
           </h2>
           <p className="mt-1 text-body">January 2020 to June 2021, by month</p>
         </div>
