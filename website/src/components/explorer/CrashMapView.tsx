@@ -138,6 +138,8 @@ export default function CrashMapView({ features, view, target, selected, onSelec
     if (target) mapRef.current?.flyTo({ center: [target.view.lng, target.view.lat], zoom: target.view.z });
   }, [target]);
 
-  return <div ref={container} className="absolute inset-0" role="region" aria-label="Crash map. Use the list view for a keyboard-accessible version of the same crashes." />;
+  // Inline position: mapbox-gl.css sets `.mapboxgl-map { position: relative }`, which can win over the class
+  // depending on stylesheet order and collapse the map to 0px tall.
+  return <div ref={container} style={{ position: "absolute", inset: 0 }} role="region" aria-label="Crash map. Use the list view for a keyboard-accessible version of the same crashes." />;
 }
 
