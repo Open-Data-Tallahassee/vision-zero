@@ -1,0 +1,46 @@
+[
+  {
+    "src": "/images/woodward-crosswalk.jpg",
+    "title": "Pedestrian crosswalk on Woodward Avenue at Florida State University",
+    "creator": "The Bushranger",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/w/index.php?curid=197575807",
+    "width": 1600,
+    "height": 1192,
+    "alt": "Cars on Woodward Avenue approaching a pedestrian crossing at Florida State University"
+  },
+  {
+    "src": "/images/fourth-avenue-crosswalk.jpg",
+    "title": "Crosswalk on Fourth Avenue at Payne Community Center",
+    "creator": "The Bushranger",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/w/index.php?curid=158294978",
+    "width": 1600,
+    "height": 1053,
+    "alt": "A two-lane street with a traffic signal at Fourth Avenue near the Payne Community Center"
+  },
+  {
+    "src": "/images/centerville-signal.jpg",
+    "title": "Traffic light at Centerville and Welaunee",
+    "creator": "The Bushranger",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/w/index.php?curid=160447370",
+    "width": 1600,
+    "height": 1200,
+    "alt": "Centerville Road curving toward a signal at Welaunee Boulevard, lined with oaks"
+  },
+  {
+    "src": "/images/miccosukee-canopy.jpg",
+    "title": "Miccosukee Canopy Road Greenway Crump Road Trailhead",
+    "creator": "The Bushranger",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/w/index.php?curid=173389319",
+    "width": 1600,
+    "height": 1200,
+    "alt": "Trailhead sign for the Miccosukee Canopy Road Greenway beside a tree-lined road"
+  }
+]

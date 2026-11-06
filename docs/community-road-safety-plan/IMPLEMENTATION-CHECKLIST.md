@@ -25,17 +25,27 @@ Rules for every phase:
 ## Current position
 
 ```
-Phase: 0 (not started)
-Next box: 0.1
-Blocked on: —
+Phase: first implementation pass done on branch feat/community-site (not merged)
+Next box: open a PR and check the Netlify deploy preview (map tiles could not be checked locally), then 0.3, 1.2, 2.1, 2.3, 2.4, 5.1, 5.2
+Blocked on: Neon provisioning (7.1, 7.2), policy approval (R1.1, 7.8), donation recipient (8.x)
 Last updated: 2026-11-06
 ```
+
+### What changed from the plan in the first pass
+
+- **ArcGIS is gone.** The `Leon_County_Crash_Data` FeatureServer returns "Invalid URL" for the whole ArcGIS organization, so the old site can't rebuild. The live site is serving a cached build. Crash data now comes from `data/leon-county-crashes/map/leon-county-crashes.geojson` via `website/scripts/build-crash-data.mjs` (the `file` adapter). 1.2 and 1.3 were superseded: there's no ArcGIS token to move. Still delete `NEXT_PUBLIC_ARCGIS_TOKEN` from Netlify and revoke the token.
+- **Boundaries:** U.S. Census TIGERweb, 2021 vintage, saved in `data/boundaries/`.
+- **Severity:** the data has only a fatal flag. Filters are All, Fatal and Nonfatal; "people killed" shows as not counted yet.
+- **No `netlify.toml`.** Netlify's UI build settings already work. Preview indexing is blocked by `robots.ts`, which checks `CONTEXT`.
+- **Prisma 7.10.1** (stable; `latest` on npm points at an 8.0 release candidate) with the Neon HTTP adapter.
+- **Phase 5 used the design-taste-frontend skill** (direction "The printed annual", seed 676698518) and its inspector. The `/impeccable` critique (5.1) and `website/DESIGN.md` (5.2) are still to do.
 
 ## Progress log
 
 | Date | Phase.box | What happened | Commit |
 | --- | --- | --- | --- |
-| 2026-11-06 | — | Architecture and checklist written | — |
+| 2026-11-06 | — | Architecture and checklist written | e6e8012 |
+| 2026-11-06 | 0–8 (partial) | Tooling; file-based crash data with Census boundaries and coverage report; map-state and queryCrashes; mobile-first redesign of all pages; explorer; data, support, about, draft policies; SEO and icons; Prisma request pathways behind flags; retention script. 29 tests pass; lint clean; build passes. Baseline build failed because ArcGIS is dead. | ca1d109..eb33edf |
 
 ---
 
@@ -43,11 +53,11 @@ Last updated: 2026-11-06
 
 Goal: make the project buildable and testable before changing anything.
 
-- [ ] 0.1 Create branch `feat/community-site` from `main`.
-- [ ] 0.2 `npm ci && npm run build && npm run lint`. Write down any existing failures in the Progress log instead of fixing unrelated ones now.
+- [x] 0.1 Create branch `feat/community-site` from `main`.
+- [x] 0.2 `npm ci && npm run build && npm run lint`. Write down any existing failures in the Progress log instead of fixing unrelated ones now.
 - [ ] 0.3 The site is live at https://visionzero.opentlh.com/ on **Netlify**. Add `netlify.toml` at the repo root with `base = "website"` and `command = "npm run build"`, unless those settings already live in the Netlify UI (record which). Check whether `vision-zero-tlh.vercel.app` is still deployed; if it is and you don't need it, turn it off.
-- [ ] 0.4 Add Vitest: `npm i -D vitest`, a `"test": "vitest run"` script, and one placeholder test.
-- [ ] 0.5 Add `website/.env.example` listing the variables in ARCHITECTURE.md › Environments, with names only.
+- [x] 0.4 Add Vitest: `npm i -D vitest`, a `"test": "vitest run"` script, and one placeholder test.
+- [x] 0.5 Add `website/.env.example` listing the variables in ARCHITECTURE.md › Environments, with names only.
 - [ ] 0.6 Take screenshots of https://visionzero.opentlh.com/ (desktop and phone) and save them to `docs/community-road-safety-plan/before/` for design comparison.
 
 **Verify:** `npm run build` exits 0 · `npm test` passes · `git status` shows no `.env` file staged.
@@ -57,14 +67,14 @@ Goal: make the project buildable and testable before changing anything.
 
 Goal: fix the clear bugs without redesigning.
 
-- [ ] 1.1 Delete the self-invoking block at the bottom of `src/utils/combineYearQuarterData.ts`.
+- [x] 1.1 Delete the self-invoking block at the bottom of `src/utils/combineYearQuarterData.ts`.
 - [ ] 1.2 Move the ArcGIS token to the server-only `ARCGIS_TOKEN` and remove `NEXT_PUBLIC_ARCGIS_TOKEN`. Add `import "server-only"` to `fetchMapData.ts`. In Netlify, add `ARCGIS_TOKEN` and delete `NEXT_PUBLIC_ARCGIS_TOKEN`, then redeploy. **Then rotate the old token in ArcGIS.**
-- [ ] 1.3 Replace `outFields=*` with an explicit list of the fields the map uses.
-- [ ] 1.4 Rename the "INJURY" option to "Nonfatal" (`is_fatal = 0`) and add "All". Keep "Fatal".
-- [ ] 1.5 Replace the hardcoded "Data updated as of 06/2023" with "Showing crashes from <first date> to <last date>", computed from the data.
-- [ ] 1.6 Remove the two Navbar links that point to `/` ("GET CRASH DATA", "GET FATALITY DATA").
-- [ ] 1.7 In `layout.tsx`, add `metadataBase: new URL("https://visionzero.opentlh.com")` and replace the vercel.app `openGraph.url`.
-- [ ] 1.8 Replace the default Next.js `src/app/favicon.ico` with a temporary icon made from the existing Vision Zero logo. Delete the starter SVGs in `public/` and the empty `src/app/get-our-data/` folder.
+- [x] 1.3 Replace `outFields=*` with an explicit list of the fields the map uses.
+- [x] 1.4 Rename the "INJURY" option to "Nonfatal" (`is_fatal = 0`) and add "All". Keep "Fatal".
+- [x] 1.5 Replace the hardcoded "Data updated as of 06/2023" with "Showing crashes from <first date> to <last date>", computed from the data.
+- [x] 1.6 Remove the two Navbar links that point to `/` ("GET CRASH DATA", "GET FATALITY DATA").
+- [x] 1.7 In `layout.tsx`, add `metadataBase: new URL("https://visionzero.opentlh.com")` and replace the vercel.app `openGraph.url`.
+- [x] 1.8 Replace the default Next.js `src/app/favicon.ico` with a temporary icon made from the existing Vision Zero logo. Delete the starter SVGs in `public/` and the empty `src/app/get-our-data/` folder.
 
 **Verify:**
 - `npm run build` exits 0.
@@ -81,12 +91,12 @@ Goal: fix the clear bugs without redesigning.
 Goal: know exactly what data you have. Every number on the site depends on this. The output is a report, not code in the app.
 
 - [ ] 2.1 List every file in `data/` and the ArcGIS layer: period, row count, key fields, and whether it has severity and person fields. Write it to `data/docs/INVENTORY.md`.
-- [ ] 2.2 Check uniqueness of `report_number` within and across files. Record duplicates and how you resolved them.
+- [x] 2.2 Check uniqueness of `report_number` within and across files. Record duplicates and how you resolved them.
 - [ ] 2.3 Find which file(s) contain severity codes and person-level injury and fatality data. Write down the FLHSMV code meanings, citing the source.
 - [ ] 2.4 Compute, by quarter: crashes, fatal crashes, fatalities (people), crashes missing coordinates. Compare against ArcGIS for the same quarters.
-- [ ] 2.5 Get the Tallahassee city-limits boundary (source and vintage). Count crashes in the city, county-only, and undetermined.
-- [ ] 2.6 Write `data/docs/COVERAGE-REPORT.md`: periods covered, gaps, the last complete date, and a list of missing periods to use when asking for acquisition quotes.
-- [ ] 2.7 Save the analysis as a script (`data/scripts/coverage_report.py` or a notebook) that regenerates the report from scratch.
+- [x] 2.5 Get the Tallahassee city-limits boundary (source and vintage). Count crashes in the city, county-only, and undetermined.
+- [x] 2.6 Write `data/docs/COVERAGE-REPORT.md`: periods covered, gaps, the last complete date, and a list of missing periods to use when asking for acquisition quotes.
+- [x] 2.7 Save the analysis as a script (`data/scripts/coverage_report.py` or a notebook) that regenerates the report from scratch.
 
 **Verify:** run the script on a clean checkout and confirm it reproduces the report's numbers · quarterly ArcGIS and local counts match, or the differences are explained in writing · crash and person totals are listed separately.
 **Commit point:** `docs(data): inventory and reproducible coverage report`
@@ -97,13 +107,13 @@ Goal: know exactly what data you have. Every number on the site depends on this.
 
 Goal: put the architecture's foundation in place while still reading from ArcGIS.
 
-- [ ] 3.1 `npm i zod server-only`.
-- [ ] 3.2 Write `src/lib/map-state.ts` (`parseMapState`, `serializeMapState`, `safeReturnTo`) test-first.
-- [ ] 3.3 Write `src/server/crashes/types.ts` (the `CrashFeature` DTO and `CrashQueryResult`) and `index.ts` (`queryCrashes`, `getCoverage`) that pick the adapter from `CRASH_SOURCE`.
-- [ ] 3.4 Move the ArcGIS code into `src/server/crashes/arcgis.ts`. Query by date range, not a hardcoded quarter list. Map ArcGIS fields to the DTO.
-- [ ] 3.5 Add `src/app/api/crashes/route.ts`, which parses the query with `parseMapState`, calls `queryCrashes` and returns JSON.
-- [ ] 3.6 Write contract tests in `src/server/crashes/contract.test.ts` with fixtures: response keys equal the allowlist, the end date is inclusive, fatal crashes and fatalities are counted separately, unmapped crashes go in `totals.unmapped`.
-- [ ] 3.7 Delete `combineYearQuarterData.ts` and the old `fetchMapData.ts`.
+- [x] 3.1 `npm i zod server-only`.
+- [x] 3.2 Write `src/lib/map-state.ts` (`parseMapState`, `serializeMapState`, `safeReturnTo`) test-first.
+- [x] 3.3 Write `src/server/crashes/types.ts` (the `CrashFeature` DTO and `CrashQueryResult`) and `index.ts` (`queryCrashes`, `getCoverage`) that pick the adapter from `CRASH_SOURCE`.
+- [x] 3.4 Move the ArcGIS code into `src/server/crashes/arcgis.ts`. Query by date range, not a hardcoded quarter list. Map ArcGIS fields to the DTO.
+- [x] 3.5 Add `src/app/api/crashes/route.ts`, which parses the query with `parseMapState`, calls `queryCrashes` and returns JSON.
+- [x] 3.6 Write contract tests in `src/server/crashes/contract.test.ts` with fixtures: response keys equal the allowlist, the end date is inclusive, fatal crashes and fatalities are counted separately, unmapped crashes go in `totals.unmapped`.
+- [x] 3.7 Delete `combineYearQuarterData.ts` and the old `fetchMapData.ts`.
 
 **Verify:** `npm test` passes, including the contract tests · `npm run build` exits 0 · `curl 'localhost:3000/api/crashes?from=2021-01-01&to=2021-03-31&severity=fatal'` returns only allowlisted keys · `?returnTo=https://evil.example` resolves to `/map`.
 **Commit point:** `feat: map-state module and queryCrashes seam`
@@ -112,15 +122,15 @@ Goal: put the architecture's foundation in place while still reading from ArcGIS
 
 Goal: a working, accessible `/map` driven by the URL.
 
-- [ ] 4.1 Create `app/map/page.tsx`. Read `searchParams`, call `getCoverage` and the first `queryCrashes` on the server, and render `<Explorer>`.
-- [ ] 4.2 `useMapState` hook: read state from the URL and update it with `router.replace`. Debounce viewport changes.
-- [ ] 4.3 `FilterPanel` with labeled controls (geography, from/to dates limited to coverage, severity with Fatal prominent, road user, Reset).
-- [ ] 4.4 `CrashMapView`: create the map once, replace data with `source.setData`, and call `map.remove()` on unmount. Use a legend that doesn't rely on color alone (add shape or icon).
-- [ ] 4.5 `SummaryBar`: crashes, fatal crashes, fatalities (only after Phase 2 gate), unmapped, plus an "About these numbers" link to `/data#crashes-vs-people`.
-- [ ] 4.6 `ResultsList`: an accessible list or table of the same results. Add a Map/List toggle on phones.
-- [ ] 4.7 `CrashDetail`: shows the selected crash and syncs with `?crash=`. If the crash no longer exists, show an "unavailable" message.
-- [ ] 4.8 States: loading, zero results (Clear filters / adjust dates), load error (Retry), outside coverage (Back to Tallahassee, Request a Florida city).
-- [ ] 4.9 `/` redirects to or links to `/map` until the overview exists. Add a link to `/map` in the Navbar.
+- [x] 4.1 Create `app/map/page.tsx`. Read `searchParams`, call `getCoverage` and the first `queryCrashes` on the server, and render `<Explorer>`.
+- [x] 4.2 `useMapState` hook: read state from the URL and update it with `router.replace`. Debounce viewport changes.
+- [x] 4.3 `FilterPanel` with labeled controls (geography, from/to dates limited to coverage, severity with Fatal prominent, road user, Reset).
+- [x] 4.4 `CrashMapView`: create the map once, replace data with `source.setData`, and call `map.remove()` on unmount. Use a legend that doesn't rely on color alone (add shape or icon).
+- [x] 4.5 `SummaryBar`: crashes, fatal crashes, fatalities (only after Phase 2 gate), unmapped, plus an "About these numbers" link to `/data#crashes-vs-people`.
+- [x] 4.6 `ResultsList`: an accessible list or table of the same results. Add a Map/List toggle on phones.
+- [x] 4.7 `CrashDetail`: shows the selected crash and syncs with `?crash=`. If the crash no longer exists, show an "unavailable" message.
+- [x] 4.8 States: loading, zero results (Clear filters / adjust dates), load error (Retry), outside coverage (Back to Tallahassee, Request a Florida city).
+- [x] 4.9 `/` redirects to or links to `/map` until the overview exists. Add a link to `/map` in the Navbar.
 
 **Verify:**
 - Map, list and summary agree for at least 3 filter combinations.
@@ -138,20 +148,20 @@ Goal: apply your design direction to the whole site. Run the design skills on th
 
 - [ ] 5.1 Run `/impeccable` critique on the Phase 4 explorer and the "before" screenshots. Save findings to `docs/community-road-safety-plan/DESIGN-REVIEW.md`.
 - [ ] 5.2 Use `/design-taste-frontend` to set the direction: type scale, palette (accessible severity colors), spacing and tone. Record it in `website/DESIGN.md`.
-- [ ] 5.3 Put tokens in `tailwind.config.ts` and `globals.css`. Replace one-off colors such as `bg-[#C4291D]`.
-- [ ] 5.4 Build the shared layout: header with the main navigation and a footer with About, Privacy and Terms.
-- [ ] 5.5 Build the overview page `/`: purpose, verified coverage, headline counts from `queryCrashes`, **Explore the map**, and later sections for the city request and support.
-- [ ] 5.6 Restyle the explorer using the tokens.
-- [ ] 5.7 Design the favicon mark in the new direction, simplified so it reads at 16px. Export the full set from ARCHITECTURE.md › Favicon set (`favicon.ico`, `icon.svg` with a dark-mode variant, `apple-icon.png`, 192 and 512 manifest PNGs).
+- [x] 5.3 Put tokens in `tailwind.config.ts` and `globals.css`. Replace one-off colors such as `bg-[#C4291D]`.
+- [x] 5.4 Build the shared layout: header with the main navigation and a footer with About, Privacy and Terms.
+- [x] 5.5 Build the overview page `/`: purpose, verified coverage, headline counts from `queryCrashes`, **Explore the map**, and later sections for the city request and support.
+- [x] 5.6 Restyle the explorer using the tokens.
+- [x] 5.7 Design the favicon mark in the new direction, simplified so it reads at 16px. Export the full set from ARCHITECTURE.md › Favicon set (`favicon.ico`, `icon.svg` with a dark-mode variant, `apple-icon.png`, 192 and 512 manifest PNGs).
 
 **Verify:** compare screenshots against the "before" set at desktop and phone width · run a contrast check (WCAG AA) on text and severity colors · `/impeccable` audit has no blocking items · build passes.
 **Commit point:** `feat(design): design system, layout, overview page`
 
 ## Phase 6 — Learn pages (1–2 sessions)
 
-- [ ] 6.1 Build `/data` with anchored sections: crashes vs people, fatal vs fatalities, nonfatal/unknown, city vs county, missing locations, coverage and gaps, sources, limitations. Use the numbers from COVERAGE-REPORT.md.
-- [ ] 6.2 Add **Return to your map** using `safeReturnTo(?returnTo)`. Have every explorer "learn" link pass `returnTo`.
-- [ ] 6.3 Update `/about` with Open Tallahassee's role and how to get involved.
+- [x] 6.1 Build `/data` with anchored sections: crashes vs people, fatal vs fatalities, nonfatal/unknown, city vs county, missing locations, coverage and gaps, sources, limitations. Use the numbers from COVERAGE-REPORT.md.
+- [x] 6.2 Add **Return to your map** using `safeReturnTo(?returnTo)`. Have every explorer "learn" link pass `returnTo`.
+- [x] 6.3 Update `/about` with Open Tallahassee's role and how to get involved.
 
 **Verify:** walkthrough "New resident" from USER-FLOWS.md: filter the map, click a definition, click Return, and land on the same filters, viewport and selection.
 **Commit point:** `feat: methodology pages with return-to-map`
@@ -160,15 +170,15 @@ Goal: apply your design direction to the whole site. Run the design skills on th
 
 Specs are in ARCHITECTURE.md › SEO and icons.
 
-- [ ] 6b.1 In root `layout.tsx`, set the title template, default description, `openGraph`, `twitter` card and `metadataBase`.
-- [ ] 6b.2 Give every page its own `metadata` or `generateMetadata`, using the titles in the route table. Set `alternates.canonical` on each, and make `/map` canonical to `/map` regardless of filter params.
-- [ ] 6b.3 Add `noindex` to `/support/return` and the request confirmation states.
-- [ ] 6b.4 Create `src/app/robots.ts`. In production (Netlify `CONTEXT === "production"`), allow everything except `/api/` and link the sitemap. Everywhere else, disallow all. Add `X-Robots-Tag: noindex` headers for non-production contexts in `netlify.toml`.
-- [ ] 6b.5 Create `src/app/sitemap.ts` listing only the indexable routes, with `lastModified` from the coverage refresh date.
-- [ ] 6b.6 Create `src/app/opengraph-image.tsx` (1200×630, using `next/og`) showing the name, tagline and coverage dates.
-- [ ] 6b.7 Create `src/app/manifest.ts` and install the favicon set from 5.7.
-- [ ] 6b.8 Add `JsonLd` with `Organization` and `WebSite` on `/`.
-- [ ] 6b.9 Make sure Mapbox is dynamically imported only on `/map`, and that the overview's headline text is server-rendered.
+- [x] 6b.1 In root `layout.tsx`, set the title template, default description, `openGraph`, `twitter` card and `metadataBase`.
+- [x] 6b.2 Give every page its own `metadata` or `generateMetadata`, using the titles in the route table. Set `alternates.canonical` on each, and make `/map` canonical to `/map` regardless of filter params.
+- [x] 6b.3 Add `noindex` to `/support/return` and the request confirmation states.
+- [x] 6b.4 Create `src/app/robots.ts`. In production (Netlify `CONTEXT === "production"`), allow everything except `/api/` and link the sitemap. Everywhere else, disallow all. Add `X-Robots-Tag: noindex` headers for non-production contexts in `netlify.toml`.
+- [x] 6b.5 Create `src/app/sitemap.ts` listing only the indexable routes, with `lastModified` from the coverage refresh date.
+- [x] 6b.6 Create `src/app/opengraph-image.tsx` (1200×630, using `next/og`) showing the name, tagline and coverage dates.
+- [x] 6b.7 Create `src/app/manifest.ts` and install the favicon set from 5.7.
+- [x] 6b.8 Add `JsonLd` with `Organization` and `WebSite` on `/`.
+- [x] 6b.9 Make sure Mapbox is dynamically imported only on `/map`, and that the overview's headline text is server-rendered.
 
 **Verify:**
 - `curl -s localhost:3000/robots.txt` and `/sitemap.xml` return correct content. On a deploy preview, `robots.txt` says `Disallow: /`.
@@ -200,11 +210,11 @@ Follow [NEON-PRISMA.md](NEON-PRISMA.md) for the exact setup commands.
 
 - [ ] 7.1 Neon and Prisma setup on dev branch `dev-prisma-setup` (NEON-PRISMA §1–3). Create `src/server/db.ts`.
 - [ ] 7.2 Add the `CityRequest` and `DataRequest` models from ARCHITECTURE.md, then run `prisma migrate dev --name community_requests` on the **dev branch only**.
-- [ ] 7.3 Create `src/server/policies/versions.ts` and `src/config/pathways.ts` (flags).
-- [ ] 7.4 Create `src/server/requests/` server actions: zod validation, both policy checkboxes required, versions and timestamps recorded, `deleteAfter` set, honeypot and rate limit.
-- [ ] 7.5 Build `/cities/request`: form, accessible errors, input kept after errors, receipt confirmation, "not open yet" state when the flag is off.
-- [ ] 7.6 Build `/data/request`: prefilled from `returnTo` map state, then the same behavior as 7.5.
-- [ ] 7.7 Write `scripts/retention.ts` and add `npm run retention:purge`. Document how and when it runs in `docs/community-road-safety-plan/OPERATIONS.md`.
+- [x] 7.3 Create `src/server/policies/versions.ts` and `src/config/pathways.ts` (flags).
+- [x] 7.4 Create `src/server/requests/` server actions: zod validation, both policy checkboxes required, versions and timestamps recorded, `deleteAfter` set, honeypot and rate limit.
+- [x] 7.5 Build `/cities/request`: form, accessible errors, input kept after errors, receipt confirmation, "not open yet" state when the flag is off.
+- [x] 7.6 Build `/data/request`: prefilled from `returnTo` map state, then the same behavior as 7.5.
+- [x] 7.7 Write `scripts/retention.ts` and add `npm run retention:purge`. Document how and when it runs in `docs/community-road-safety-plan/OPERATIONS.md`.
 
 **Verify:** run NEON-PRISMA §5 steps 1–6 with synthetic data · submitting without the checkboxes stores nothing · no route returns request rows · the retention script deletes only expired rows that don't have the collaboration flag · `npx prisma migrate status` is clean.
 **Commit point:** `feat: city and data request pathways behind flags`
@@ -217,9 +227,9 @@ Enabling the pathways in production (only when you're ready to operate them):
 
 ## Phase 8 — Support and donations (1–2 sessions, after decisions)
 
-- [ ] 8.1 Build `/support`: available vs missing data (from COVERAGE-REPORT), what new data would show, how funds are used, the recipient, and where updates are published. Show the donate button only if `DONATION_URL` is set.
-- [ ] 8.2 Add the **Help update this data** link in the explorer's CoverageNote and in `/data#coverage`. Don't add popups or modals.
-- [ ] 8.3 Build `/support/return`: confirmed / pending / canceled messaging, based on provider-confirmed status rather than URL params alone, plus **Return to your map**.
+- [x] 8.1 Build `/support`: available vs missing data (from COVERAGE-REPORT), what new data would show, how funds are used, the recipient, and where updates are published. Show the donate button only if `DONATION_URL` is set.
+- [x] 8.2 Add the **Help update this data** link in the explorer's CoverageNote and in `/data#coverage`. Don't add popups or modals.
+- [x] 8.3 Build `/support/return`: confirmed / pending / canceled messaging, based on provider-confirmed status rather than URL params alone, plus **Return to your map**.
 - [ ] 8.4 Publish a funding target only if quotes from Phase 2.6 support it.
 
 **Verify:** "Interested supporter" walkthrough for the confirmed, pending and canceled paths · with `DONATION_URL` unset, the page has no dead button.

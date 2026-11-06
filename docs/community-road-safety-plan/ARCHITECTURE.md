@@ -107,7 +107,7 @@ queryCrashes(filters: MapState): Promise<CrashQueryResult>
 getCoverage(): Promise<Coverage>
 ```
 
-Two adapters sit behind it: `arcgis.ts` (interim, token server-side, explicit `outFields`) and `postgres.ts` (after the import is reconciled). A single env variable, `CRASH_SOURCE=arcgis|postgres`, picks one. Both adapters have to pass the same contract tests.
+Two adapters sit behind it: `file.ts` (current: a dataset generated from `data/` at build time by `scripts/build-crash-data.mjs`) and `postgres.ts` (Phase 9). A single env variable, `CRASH_SOURCE=file|postgres`, will pick one. Both adapters have to pass the same contract tests. The planned ArcGIS adapter was dropped: as of 2026-11-06 the ArcGIS organization returns "Invalid URL" for every request.
 
 ### `src/server/requests/` and `src/server/policies/`
 
