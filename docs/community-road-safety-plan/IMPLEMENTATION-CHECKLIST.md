@@ -29,6 +29,7 @@ Phase: first implementation pass done on branch feat/community-site (not merged)
 Next box: open a PR and check the Netlify deploy preview (map tiles could not be checked locally), then 0.3, 1.2, 2.1, 2.3, 2.4, 5.1, 5.2
 Blocked on: Netlify env vars for the forms (DATABASE_URL, ENABLE_*), donation recipient (8.x). Policies approved 2026-11-06.
 Last updated: 2026-11-06
+Deferred until after merge: DONATION_URL (skipped for now), confirm privacy@opentlh.com receives mail, Lighthouse, Search Console sitemap
 TODO: privacy contact is privacy@opentlh.com for now; confirm or replace it (website/src/app/privacy/page.tsx)
 ```
 
