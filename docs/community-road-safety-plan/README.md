@@ -2,6 +2,8 @@
 
 Status: planning decisions approved; privacy and terms approval requirements added. Implementation and publication remain future work. Confirmed requirements are separated from proposals. No implementation is authorized by this document alone.
 
+**Start here to build:** [ARCHITECTURE.md](ARCHITECTURE.md) describes the target system. [IMPLEMENTATION-CHECKLIST.md](IMPLEMENTATION-CHECKLIST.md) lists phased tasks with verification steps and a resume protocol.
+
 ## Confirmed purpose and scope
 
 Build a free resource for neighbors and the community, using the Florida crash data already collected, initially focused on Tallahassee. Serve residents with a simple overview and researchers/advocates with a deeper explorer. Improve website design and data reliability together.
