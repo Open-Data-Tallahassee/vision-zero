@@ -34,6 +34,7 @@ export default async function DataPage({ searchParams }: { searchParams: Promise
             <li><a href="#missing-locations" className="text-link">Missing locations</a></li>
             <li><a href="#coverage" className="text-link">Coverage and gaps</a></li>
             <li><a href="#limitations" className="text-link">Limitations</a></li>
+            <li><a href="#downloads" className="text-link">Downloads</a></li>
             <li><a href="#request" className="text-link">Requesting data</a></li>
           </ul>
         </nav>
@@ -52,12 +53,12 @@ export default async function DataPage({ searchParams }: { searchParams: Promise
         A crash is one event. It can involve several vehicles and several people. The map counts crashes. &ldquo;People involved&rdquo; on a crash counts everyone in it, including people who weren&rsquo;t hurt.
       </p>
       <p>
-        The number of people killed isn&rsquo;t shown yet. The records on the site say whether a crash was fatal, but not how many people died in it. We&rsquo;ll add a count of people killed once person-level records are checked, so one crash that killed two people is counted correctly.
+        The map doesn&rsquo;t show the number of people killed yet; one crash that killed two people is still one dot. The person-level records have now been checked against the crashes, and the <a href="#downloads">downloads</a> include a count of people killed and injured on every crash, plus one row for each person.
       </p>
 
       <h2 id="fatal">Fatal and nonfatal</h2>
       <p>
-        A <strong>fatal crash</strong> is one in which at least one person died. A <strong>nonfatal crash</strong> is every other reported crash, whether or not someone was hurt. The records don&rsquo;t include injury severity yet, so the site can&rsquo;t separate serious injuries from minor ones or from crashes where no one was hurt.
+        A <strong>fatal crash</strong> is one in which at least one person died. A <strong>nonfatal crash</strong> is every other reported crash, whether or not someone was hurt. The map doesn&rsquo;t separate serious injuries from minor ones yet. The <a href="#downloads">downloads</a> include each person&rsquo;s injury severity as the officer recorded it.
       </p>
       <p>
         From {formatCoverage(coverage)}, Leon County had {county.totals.fatalCrashes} fatal crashes; {city.totals.fatalCrashes} of them were inside Tallahassee city limits.
@@ -96,9 +97,30 @@ export default async function DataPage({ searchParams }: { searchParams: Promise
         Crash records: Florida Department of Highway Safety and Motor Vehicles (FLHSMV). Boundaries: U.S. Census Bureau. The code that prepares the data is <a href="https://github.com/Open-Data-Tallahassee/vision-zero">public on GitHub</a>.
       </p>
 
+      <h2 id="downloads">Downloads</h2>
+      <p>
+        The data behind the map is free to download, for Leon County or only inside Tallahassee city limits. It covers {formatCoverage(coverage)}.
+      </p>
+      <ul>
+        <li>
+          <strong className="font-medium">Crashes</strong>, one row per crash: date, time, location, street and cross street, whether it was fatal, who was involved, and counts of people killed and injured.{" "}
+          Leon County: <a href="/downloads/leon-county-crashes.csv" download>CSV</a>, <a href="/downloads/leon-county-crashes.geojson" download>GeoJSON</a>. Tallahassee: <a href="/downloads/tallahassee-crashes.csv" download>CSV</a>, <a href="/downloads/tallahassee-crashes.geojson" download>GeoJSON</a>.
+        </li>
+        <li>
+          <strong className="font-medium">People</strong>, one row per person on a crash report: role (driver, passenger or not in a vehicle) and injury severity, linked to the crash by report number.{" "}
+          <a href="/downloads/leon-county-people.csv" download>Leon County CSV</a>, <a href="/downloads/tallahassee-people.csv" download>Tallahassee CSV</a>.
+        </li>
+      </ul>
+      <p>
+        The people files leave out age, sex and home ZIP code. With a crash&rsquo;s exact time and place, those could identify someone who was hurt. The records never include names.
+      </p>
+      <p>
+        Every field is explained in the <a href="https://github.com/Open-Data-Tallahassee/vision-zero/tree/main/data/public">data guide on GitHub</a>, which also has the same files. They&rsquo;re published under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>: use them for anything, and credit &ldquo;Vision Zero TLH (Open Tallahassee), from Florida Department of Highway Safety and Motor Vehicles crash records&rdquo;.
+      </p>
+
       <h2 id="request">Requesting data</h2>
       <p>
-        There are no public downloads. If you need data for research or advocacy, <Link href="/data/request">request it</Link>. Requests are free and reviewed by a person. We share crash-level details and totals, never names, contact details or records about individual people.
+        If the downloads don&rsquo;t cover what you need, <Link href="/data/request">request it</Link>. Requests are free and reviewed by a person. We share crash-level details and totals, never names, contact details or records that could identify individual people.
       </p>
     </TextPage>
   );

@@ -5,8 +5,13 @@ How to run the parts of the site that need a person. Nothing here is automated y
 ## Refreshing crash data
 
 1. Add the new source file under `data/` and point `SOURCE` (and `WINDOW`, if the period changed) in `website/scripts/build-crash-data.mjs` at it.
-2. From `website/`, run `npm run data:build`. It rewrites the server dataset and `data/docs/COVERAGE-REPORT.md`.
-3. Read the report's excluded-record counts and quarterly table. Investigate anything that jumped.
+2. From `website/`, run `npm run data:build`. It rewrites three things:
+   - the server dataset;
+   - the public downloads in `data/public/`, with a copy in `website/public/downloads/`;
+   - `data/docs/COVERAGE-REPORT.md`.
+
+   If new files have person records, point `PEOPLE` at them too. Keep any original with age, sex or home ZIP in `data/private/`, which git ignores.
+3. Read the report's excluded-record counts, quarterly table and Reconciliation section. Investigate anything that jumped, and any fatal crash without a person killed. Update the row counts in `data/public/README.md` and `data/docs/INVENTORY.md`.
 4. Run `npm test` and `npm run build`, then open a PR. The Netlify deploy preview is the place to check the map.
 
 ## Turning on a request pathway

@@ -48,6 +48,7 @@ src/components/D3/
 
 # generated crash data (npm run data:build)
 /src/server/crashes/generated/
+/public/downloads/
 
 # generated Prisma client
 /src/generated/

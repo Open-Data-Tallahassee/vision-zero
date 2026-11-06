@@ -23,8 +23,8 @@ export default function TermsPage() {
 
       <h2>Using the site</h2>
       <ul>
-        <li>Use it lawfully, and don&rsquo;t try to disrupt it or pull data from it in bulk.</li>
-        <li>There are no public downloads. To get data, <Link href="/data/request">request it</Link>.</li>
+        <li>Use it lawfully, and don&rsquo;t try to disrupt it or scrape it. The <Link href="/data#downloads">downloads</Link> have the same data.</li>
+        <li>The downloads are published under CC BY 4.0: you can reuse them for anything if you credit the source as the data page describes. For anything they don&rsquo;t cover, <Link href="/data/request">request it</Link>.</li>
       </ul>
 
       <h2>Requests</h2>

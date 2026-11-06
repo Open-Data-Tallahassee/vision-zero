@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ClosedNotice from "@/components/forms/ClosedNotice";
 import RequestForm from "@/components/forms/RequestForm";
 import TextPage from "@/components/site/TextPage";
@@ -24,7 +25,7 @@ export default async function DataRequestPage({ searchParams }: { searchParams: 
       photo={1}
       title="Request crash data"
       returnTo={back}
-      lead={<p>There are no public downloads, but you can ask for data. Requests are free and a person reads each one.</p>}
+      lead={<p>Most data is free to <Link href="/data#downloads">download</Link>. If you need something the downloads don&rsquo;t cover, ask here. Requests are free and a person reads each one.</p>}
     >
       <h2>What we can share</h2>
       <ul>

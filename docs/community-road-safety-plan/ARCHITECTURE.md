@@ -246,7 +246,7 @@ People will search for things like "Tallahassee traffic crashes", "Leon County f
 | `src/app/sitemap.ts` | Static indexable routes only, with `lastModified` from the coverage refresh date for `/`, `/map` and `/data`. |
 | `src/app/opengraph-image.tsx` | 1200×630 share image built with `next/og`: name, tagline, coverage dates. Pages can override it; for example, `/map` can show the map view. |
 | `src/app/manifest.ts` | Name, short name, `theme_color` and `background_color` from the design tokens, plus 192 and 512 icons. |
-| `src/components/JsonLd.tsx` | JSON-LD `Organization` (Open Tallahassee) and `WebSite` on `/`. Don't use `Dataset` markup with a `distribution`, because there are no public downloads. |
+| `src/components/JsonLd.tsx` | JSON-LD `Organization` (Open Tallahassee) and `WebSite` on `/`. Public downloads now exist (`/downloads/`, listed on `/data#downloads`), so `Dataset` markup with a `distribution` could be added later. |
 
 ### Favicon set
 

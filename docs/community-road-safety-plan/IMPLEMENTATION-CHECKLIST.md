@@ -26,7 +26,7 @@ Rules for every phase:
 
 ```
 Phase: first implementation pass done on branch feat/community-site (not merged)
-Next box: open a PR and check the Netlify deploy preview (map tiles could not be checked locally), then 0.3, 1.2, 2.1, 2.3, 2.4, 5.1, 5.2
+Next box: show people killed, injury severity and street names on the map (the data is ready), then open a PR and check the Netlify deploy preview
 Blocked on: Netlify env vars for the forms (DATABASE_URL, ENABLE_*), donation recipient (8.x). Policies approved 2026-11-06.
 Last updated: 2026-11-06
 Deferred until after merge: DONATION_URL (skipped for now), confirm privacy@opentlh.com receives mail, Lighthouse, Search Console sitemap
@@ -37,10 +37,10 @@ TODO: privacy contact is privacy@opentlh.com for now; confirm or replace it (web
 
 - **ArcGIS is gone.** The `Leon_County_Crash_Data` FeatureServer returns "Invalid URL" for the whole ArcGIS organization, so the old site can't rebuild. The live site is serving a cached build. Crash data now comes from `data/leon-county-crashes/map/leon-county-crashes.geojson` via `website/scripts/build-crash-data.mjs` (the `file` adapter). 1.2 and 1.3 were superseded: there's no ArcGIS token to move. Still delete `NEXT_PUBLIC_ARCGIS_TOKEN` from Netlify and revoke the token.
 - **Boundaries:** U.S. Census TIGERweb, 2021 vintage, saved in `data/boundaries/`.
-- **Severity:** the data has only a fatal flag. Filters are All, Fatal and Nonfatal; "people killed" shows as not counted yet.
+- **Severity:** the map file has only a fatal flag, so the filters are All, Fatal and Nonfatal, and "people killed" shows as not counted yet. Phase 2 found person-level injury severity for the same period, and the downloads include it; the map doesn't use it yet.
 - **No `netlify.toml`.** Netlify's UI build settings already work. Preview indexing is blocked by `robots.ts`, which checks `CONTEXT`.
 - **Prisma 7.10.1** (stable; `latest` on npm points at an 8.0 release candidate) with the Neon HTTP adapter.
-- **Name and polish (commit 3b65442):** the site is "Vision Zero TLH" everywhere it names itself (header, hero, footer, titles, manifest, share image). Every photo shows an on-image credit (`PhotoCredit`, data in `src/content/photo-credits.json`) and the footer lists full credits. Dark mode: `data-theme` on `<html>`, set by an inline head script from the saved or system preference; `ThemeToggle` in the header. The map basemap and dot colours stay the same in both themes. A custom 404 (`src/app/not-found.tsx`) returns a real 404 status.
+- **Name and polish (commit 3b65442):** the site is "Vision Zero TLH" everywhere it names itself (header, hero, footer, titles, manifest, share image). Every photo shows an on-image credit (`PhotoCredit`, data in `src/content/photo-credits.json`) and the footer lists full credits. Dark mode: `data-theme` on `<html>`, set by an inline head script from the saved or system preference; `ThemeToggle` in the header. The map follows the theme (monochrome Standard basemap, day or night). A custom 404 (`src/app/not-found.tsx`) returns a real 404 status.
 - **Phase 5 used the design-taste-frontend skill** (direction "The printed annual", seed 676698518) and its inspector. The `/impeccable` critique (5.1) is in DESIGN-REVIEW.md, and the design system is recorded in `website/DESIGN.md` (5.2).
 
 ## Progress log
@@ -94,10 +94,10 @@ Goal: fix the clear bugs without redesigning.
 
 Goal: know exactly what data you have. Every number on the site depends on this. The output is a report, not code in the app.
 
-- [ ] 2.1 List every file in `data/` and the ArcGIS layer: period, row count, key fields, and whether it has severity and person fields. Write it to `data/docs/INVENTORY.md`.
+- [x] 2.1 List every file in `data/` and the ArcGIS layer: period, row count, key fields, and whether it has severity and person fields. Write it to `data/docs/INVENTORY.md`. Done 2026-11-06; there is no ArcGIS layer any more.
 - [x] 2.2 Check uniqueness of `report_number` within and across files. Record duplicates and how you resolved them.
-- [ ] 2.3 Find which file(s) contain severity codes and person-level injury and fatality data. Write down the FLHSMV code meanings, citing the source.
-- [ ] 2.4 Compute, by quarter: crashes, fatal crashes, fatalities (people), crashes missing coordinates. Compare against ArcGIS for the same quarters.
+- [x] 2.3 Find which file(s) contain severity codes and person-level injury and fatality data. Write down the FLHSMV code meanings, citing the source. Done 2026-11-06: the 2020 and 2021 person files in `data/leon-county-crashes/*/processed/` (see INVENTORY.md). Codes are in `data/docs/person-code-dictionary.md`. The source document's name and date weren't recorded and still need adding.
+- [x] 2.4 Compute, by quarter: crashes, fatal crashes, fatalities (people), crashes missing coordinates. Compare against ArcGIS for the same quarters. Done 2026-11-06 in COVERAGE-REPORT.md. ArcGIS is gone, so the check is crash records against person records: all 39 fatal crashes match, 43 people were killed, and 172 were seriously injured.
 - [x] 2.5 Get the Tallahassee city-limits boundary (source and vintage). Count crashes in the city, county-only, and undetermined.
 - [x] 2.6 Write `data/docs/COVERAGE-REPORT.md`: periods covered, gaps, the last complete date, and a list of missing periods to use when asking for acquisition quotes.
 - [x] 2.7 Save the analysis as a script (`data/scripts/coverage_report.py` or a notebook) that regenerates the report from scratch.
@@ -105,7 +105,12 @@ Goal: know exactly what data you have. Every number on the site depends on this.
 **Verify:** run the script on a clean checkout and confirm it reproduces the report's numbers · quarterly ArcGIS and local counts match, or the differences are explained in writing · crash and person totals are listed separately.
 **Commit point:** `docs(data): inventory and reproducible coverage report`
 
-**Gate:** Don't show a fatalities total or an "Injury" filter until 2.3 and 2.4 are done.
+**Gate:** Don't show a fatalities total or an "Injury" filter until 2.3 and 2.4 are done. (Met 2026-11-06. The counts are in the downloads; the map doesn't show them yet.)
+
+**Added 2026-11-06: public downloads.** The repo is public and people should be able to pull the data, which reverses the earlier "no public downloads" decision (INTERVIEW Q10).
+- **What:** `npm run data:build` writes crash and person files for Leon County and Tallahassee to `data/public/` (committed, CC BY 4.0, field guide in `data/public/README.md`). It also copies them to `website/public/downloads/` (git-ignored), which `/data#downloads` links to.
+- **Left out:** age, sex and home ZIP code.
+- **Moved:** the raw 2019 person file that had those fields is now in the git-ignored `data/private/`, with a full backup of the original files in `data/private/original/`.
 
 ## Phase 3 — Map state and crash query seam (2 sessions)
 
