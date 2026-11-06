@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
+    "data:prepare": "node scripts/prepare-data.mjs",
     "data:build": "node scripts/build-crash-data.mjs",
     "predev": "npm run data:build && prisma generate",
     "prebuild": "npm run data:build && prisma generate",

@@ -36,7 +36,7 @@ TODO: privacy contact is privacy@opentlh.com for now; confirm or replace it (web
 ### What changed from the plan in the first pass
 
 - **ArcGIS is gone.** The `Leon_County_Crash_Data` FeatureServer returns "Invalid URL" for the whole ArcGIS organization, so the old site can't rebuild. The live site is serving a cached build. Crash data now comes from `data/leon-county-crashes/map/leon-county-crashes.geojson` via `website/scripts/build-crash-data.mjs` (the `file` adapter). 1.2 and 1.3 were superseded: there's no ArcGIS token to move. Still delete `NEXT_PUBLIC_ARCGIS_TOKEN` from Netlify and revoke the token.
-- **Boundaries:** U.S. Census TIGERweb, 2021 vintage, saved in `data/boundaries/`.
+- **Boundaries:** U.S. Census TIGERweb, 2021 vintage, in `data/private/sources/boundaries/` (local only).
 - **Severity:** the map file has only a fatal flag, so the filters are All, Fatal and Nonfatal, and "people killed" shows as not counted yet. Phase 2 found person-level injury severity for the same period. The map now uses it: there's a Serious filter, people killed and seriously injured appear in the totals and crash details, and each crash shows its street.
 - **No `netlify.toml`.** Netlify's UI build settings already work. Preview indexing is blocked by `robots.ts`, which checks `CONTEXT`.
 - **Prisma 7.10.1** (stable; `latest` on npm points at an 8.0 release candidate) with the Neon HTTP adapter.
@@ -108,9 +108,13 @@ Goal: know exactly what data you have. Every number on the site depends on this.
 **Gate:** Don't show a fatalities total or an "Injury" filter until 2.3 and 2.4 are done. (Met 2026-11-06. The map now shows people killed and seriously injured, a Serious filter for crashes that killed or seriously injured someone, and street names in the crash details and list.)
 
 **Added 2026-11-06: public downloads.** The repo is public and people should be able to pull the data, which reverses the earlier "no public downloads" decision (INTERVIEW Q10).
-- **What:** `npm run data:build` writes crash and person files for Leon County and Tallahassee to `data/public/` (committed, CC BY 4.0, field guide in `data/public/README.md`). It also copies them to `website/public/downloads/` (git-ignored), which `/data#downloads` links to.
+- **What:** `npm run data:prepare` (run locally from the git-ignored raw sources) writes crash and person files for Leon County and Tallahassee to `data/public/` (committed, CC BY 4.0, field guide in `data/public/README.md`). It also copies them to `website/public/downloads/` (git-ignored), which `/data#downloads` links to.
 - **Left out:** age, sex and home ZIP code.
 - **Moved:** the raw 2019 person file that had those fields is now in the git-ignored `data/private/`, with a full backup of the original files in `data/private/original/`.
+- **Only published data on GitHub (2026-11-06).** Every raw source (crash and person files, the street-name file, boundaries) and the notebooks moved to `data/private/sources/` and `data/private/notebooks/`.
+  - `npm run data:prepare` runs locally and writes `data/public/`.
+  - `npm run data:build` (Netlify) reads only `data/public/`.
+  - The site's dataset is identical to before.
 
 ## Phase 3 — Map state and crash query seam (2 sessions)
 

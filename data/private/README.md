@@ -13,3 +13,14 @@ The public, de-identified versions are in `data/public/`. Keep originals here wh
 A full copy of `data/` (all files, notebooks and the code dictionaries) and of `website/scripts/build-crash-data.mjs`, taken on 2026-11-06 before the Phase 2 data work changed anything. It keeps the original folder layout, including `quarterly-tranches/leon-people-2019-q2.csv`. Nothing in it is published.
 
 On 2026-11-06 the files the site doesn't use were deleted from `data/` (see `docs/INVENTORY.md` › Removed from the public repo). `original/` is the only local copy of them.
+
+## `sources/` and `notebooks/`
+
+Since 2026-11-06 the repo holds only published data, so every raw input lives here instead:
+
+- **`sources/leon-county-crashes/`:** the crash map file and the 2020 and 2021 person files.
+- **`sources/clean/`:** the 2018 to 2021 street-name file.
+- **`sources/boundaries/`:** the Census boundaries.
+- **`notebooks/`:** the notebooks that built them.
+
+`website/scripts/prepare-data.mjs` reads `sources/`. Back this folder up somewhere else, because git doesn't keep it.

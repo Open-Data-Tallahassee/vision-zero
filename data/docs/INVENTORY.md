@@ -1,10 +1,20 @@
 # Data inventory
 
-Every data file in `data/`, as of 2026-11-06 (checklist item 2.1), after removing the files the site doesn't use. Row counts don't include the header. "Severity" means a per-person injury severity field.
+Every data file, as of 2026-11-06 (checklist item 2.1). Row counts don't include the header. "Severity" means a per-person injury severity field.
 
-The site no longer uses an ArcGIS layer: the map is built from the files below by `website/scripts/build-crash-data.mjs`.
+Only published data is in the repo:
+- **`data/public/`:** the downloads.
+- **`data/docs/`:** documentation.
 
-## Used by the site
+Everything else is raw input, kept on the maintainer's machine in the git-ignored `data/private/`.
+
+The pipeline:
+1. `website/scripts/prepare-data.mjs` (`npm run data:prepare`) runs locally and turns the raw sources below into `data/public/`.
+2. `website/scripts/build-crash-data.mjs` builds the site from `data/public/` only.
+
+The site no longer uses an ArcGIS layer.
+
+## Raw sources (local only, in `data/private/sources/`)
 
 | File | Level | Period | Rows | Unique reports | Key fields | Severity | Person fields |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -15,11 +25,11 @@ The site no longer uses an ArcGIS layer: the map is built from the files below b
 | `boundaries/leon-county-2021.geojson` | Boundary | January 1, 2021 vintage | 1 | | U.S. Census TIGERweb, Leon County (GEOID 12073) | | |
 | `boundaries/tallahassee-city-2021.geojson` | Boundary | January 1, 2021 vintage | 1 | | U.S. Census TIGERweb, Tallahassee city (GEOID 1270600) | | |
 
-The two person files overlap: 81 person rows appear in both, identically, and the build counts them once.
+The two person files overlap: 81 person rows appear in both, identically, and the prepare step counts them once.
 
 ## Removed from the public repo (2026-11-06)
 
-These files weren't used by the site, so they were deleted from `data/`. Copies are kept locally in the git-ignored `data/private/original/`, and earlier commits still have them.
+These files weren't used by the site, so they were removed. Copies are kept locally in the git-ignored `data/private/original/`. Earlier commits on GitHub still have them, as they do the raw sources above.
 
 | File | Level | Period | Rows | What it was |
 | --- | --- | --- | --- | --- |
@@ -31,9 +41,9 @@ These files weren't used by the site, so they were deleted from `data/`. Copies 
 | `scripts/leon-people-2019-q2.ipynb`, `scripts/csv-to-geojson.ipynb` | Notebook | | | Built the 2019 files above. |
 | `private/leon-people-2019-q2.csv` (git-ignored, never deleted) | Person | 2019 Q2 | 7,639 | Raw person file with home ZIP, age and sex. |
 
-## Notebooks kept
+## Notebooks (local only, in `data/private/notebooks/`)
 
-`scripts/leon-county-crashes.ipynb` and `scripts/leon-people-2021-q2.ipynb` record how the map file and the person files were built from raw FLHSMV exports, which aren't in the repo. `scripts/clean.ipynb` built `clean/all-2018to2021.csv`; some of its inputs are only in `data/private/original/`.
+`leon-county-crashes.ipynb` and `leon-people-2021-q2.ipynb` record how the map file and the person files were built from raw FLHSMV exports. `clean.ipynb` built `clean/all-2018to2021.csv`; some of its inputs are only in `data/private/original/`.
 
 ## Code dictionaries
 

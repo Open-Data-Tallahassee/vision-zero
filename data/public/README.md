@@ -9,7 +9,7 @@ Reported traffic crashes in Leon County, Florida, from **January 1, 2020 to June
 | `leon-county-people.csv` | 30,053 | One row per person on a Leon County crash report |
 | `tallahassee-people.csv` | 25,035 | The people on Tallahassee city crashes |
 
-`npm run data:build` in `website/` writes these files, so don't edit them by hand. `data/docs/COVERAGE-REPORT.md` has the totals by quarter, and explains how the files were checked against each other.
+`npm run data:prepare` in `website/` writes these files from raw sources that aren't published, so don't edit them by hand. `coverage.json` records the date window, the sources and how many records were left out. `data/docs/COVERAGE-REPORT.md` has the totals by quarter, and explains how the files were checked against each other.
 
 ## License and credit
 
@@ -39,7 +39,7 @@ GeoJSON files have the same fields as the CSVs. Latitude and longitude become th
 | `street_number` | Street address number, where the report gives one. |
 | `cross_street` | The nearest intersecting road, where the report gives one (about 82% of crashes). |
 | `fatal` | `true` if at least one person died within 30 days. |
-| `pedestrian_involved`, `bicyclist_involved` | `true` if a pedestrian or bicyclist was involved. |
+| `pedestrian_involved`, `bicyclist_involved`, `motor_vehicle_involved` | `true` if a pedestrian, bicyclist or motor vehicle was involved. |
 | `vehicles` | Number of vehicles involved. |
 | `people` | Number of people involved, including people who weren't hurt. |
 | `killed` | People who died within 30 days (FLHSMV injury severity 5). |
