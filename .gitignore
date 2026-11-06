@@ -50,3 +50,5 @@ data/leon-county-crashes/2020/raw/
 data/leon-county-crashes/2021-q1-and-q2/raw/
 vision-zero.code-workspace
 .taste-skill/
+website/package-lock.json
+website/next.config.ts
