@@ -13,7 +13,8 @@ export default function PrivacyPage() {
   return (
     <TextPage photo={5} title="Privacy Policy" lead={<p>Version {v.version}. {v.effective ? `Effective ${v.effective}.` : "Draft: this text hasn't been approved by the publisher yet."}</p>}>
       <h2>Who runs this site</h2>
-      <p>Vision Zero TLH is published by volunteers with <a href="https://www.opentlh.com/">Open Tallahassee</a>. A privacy contact will be listed here before any form opens.</p>
+      <p>Vision Zero TLH is published by volunteers with <a href="https://www.opentlh.com/">Open Tallahassee</a>. Privacy questions and deletion requests: <a href="mailto:privacy@opentlh.com">privacy@opentlh.com</a>.</p>
+      {/* TODO: confirm or replace privacy@opentlh.com with the long-term privacy contact. */}
 
       <h2>When you browse</h2>
       <ul>
