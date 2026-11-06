@@ -2,7 +2,7 @@
 // Shared by server and client code; must not import anything server-only.
 
 export const GEOGRAPHIES = ["tallahassee", "leon"] as const;
-export const SEVERITIES = ["all", "fatal", "nonfatal"] as const;
+export const SEVERITIES = ["all", "fatal", "serious", "nonfatal"] as const;
 export const ROAD_USERS = ["all", "pedestrian", "bicyclist", "motor_vehicle"] as const;
 
 export type Geography = (typeof GEOGRAPHIES)[number];
@@ -38,6 +38,7 @@ export const GEOGRAPHY_LABELS: Record<Geography, string> = {
 export const SEVERITY_LABELS: Record<Severity, string> = {
   all: "All crashes",
   fatal: "Fatal crashes",
+  serious: "Crashes that killed or seriously injured someone",
   nonfatal: "Nonfatal crashes",
 };
 

@@ -26,7 +26,7 @@ Rules for every phase:
 
 ```
 Phase: first implementation pass done on branch feat/community-site (not merged)
-Next box: show people killed, injury severity and street names on the map (the data is ready), then open a PR and check the Netlify deploy preview
+Next box: open a PR and check the Netlify deploy preview
 Blocked on: Netlify env vars for the forms (DATABASE_URL, ENABLE_*), donation recipient (8.x). Policies approved 2026-11-06; Terms updated to version 2026-11-06.2 for public downloads.
 Last updated: 2026-11-06
 Deferred until after merge: DONATION_URL (skipped for now), confirm privacy@opentlh.com receives mail, Lighthouse, Search Console sitemap
@@ -37,7 +37,7 @@ TODO: privacy contact is privacy@opentlh.com for now; confirm or replace it (web
 
 - **ArcGIS is gone.** The `Leon_County_Crash_Data` FeatureServer returns "Invalid URL" for the whole ArcGIS organization, so the old site can't rebuild. The live site is serving a cached build. Crash data now comes from `data/leon-county-crashes/map/leon-county-crashes.geojson` via `website/scripts/build-crash-data.mjs` (the `file` adapter). 1.2 and 1.3 were superseded: there's no ArcGIS token to move. Still delete `NEXT_PUBLIC_ARCGIS_TOKEN` from Netlify and revoke the token.
 - **Boundaries:** U.S. Census TIGERweb, 2021 vintage, saved in `data/boundaries/`.
-- **Severity:** the map file has only a fatal flag, so the filters are All, Fatal and Nonfatal, and "people killed" shows as not counted yet. Phase 2 found person-level injury severity for the same period, and the downloads include it; the map doesn't use it yet.
+- **Severity:** the map file has only a fatal flag, so the filters are All, Fatal and Nonfatal, and "people killed" shows as not counted yet. Phase 2 found person-level injury severity for the same period. The map now uses it: there's a Serious filter, people killed and seriously injured appear in the totals and crash details, and each crash shows its street.
 - **No `netlify.toml`.** Netlify's UI build settings already work. Preview indexing is blocked by `robots.ts`, which checks `CONTEXT`.
 - **Prisma 7.10.1** (stable; `latest` on npm points at an 8.0 release candidate) with the Neon HTTP adapter.
 - **Name and polish (commit 3b65442):** the site is "Vision Zero TLH" everywhere it names itself (header, hero, footer, titles, manifest, share image). Every photo shows an on-image credit (`PhotoCredit`, data in `src/content/photo-credits.json`) and the footer lists full credits. Dark mode: `data-theme` on `<html>`, set by an inline head script from the saved or system preference; `ThemeToggle` in the header. The map follows the theme (monochrome Standard basemap, day or night). A custom 404 (`src/app/not-found.tsx`) returns a real 404 status.
@@ -105,7 +105,7 @@ Goal: know exactly what data you have. Every number on the site depends on this.
 **Verify:** run the script on a clean checkout and confirm it reproduces the report's numbers · quarterly ArcGIS and local counts match, or the differences are explained in writing · crash and person totals are listed separately.
 **Commit point:** `docs(data): inventory and reproducible coverage report`
 
-**Gate:** Don't show a fatalities total or an "Injury" filter until 2.3 and 2.4 are done. (Met 2026-11-06. The counts are in the downloads; the map doesn't show them yet.)
+**Gate:** Don't show a fatalities total or an "Injury" filter until 2.3 and 2.4 are done. (Met 2026-11-06. The map now shows people killed and seriously injured, a Serious filter for crashes that killed or seriously injured someone, and street names in the crash details and list.)
 
 **Added 2026-11-06: public downloads.** The repo is public and people should be able to pull the data, which reverses the earlier "no public downloads" decision (INTERVIEW Q10).
 - **What:** `npm run data:build` writes crash and person files for Leon County and Tallahassee to `data/public/` (committed, CC BY 4.0, field guide in `data/public/README.md`). It also copies them to `website/public/downloads/` (git-ignored), which `/data#downloads` links to.

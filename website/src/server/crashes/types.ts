@@ -9,11 +9,37 @@ export interface CrashFeature {
   roadUsers: ("bicyclist" | "motor_vehicle" | "pedestrian")[];
   vehicles: number;
   people: number;
+  /** People who died within 30 days (FLHSMV injury severity 5). */
+  killed: number;
+  /** People with incapacitating injuries (severity 4). */
+  seriousInjuries: number;
+  /** The most serious injury anyone in the crash had. */
+  injury: Injury;
+  street: string;
+  /** Nearest intersecting road, when the report gives one. */
+  crossStreet: string;
   lng: number;
   lat: number;
 }
 
-export const CRASH_FIELDS = ["id", "date", "time", "severity", "roadUsers", "vehicles", "people", "lng", "lat"] as const satisfies readonly (keyof CrashFeature)[];
+export type Injury = "fatal" | "serious" | "minor" | "possible" | "none" | "unknown";
+
+export const CRASH_FIELDS = [
+  "id",
+  "date",
+  "time",
+  "severity",
+  "roadUsers",
+  "vehicles",
+  "people",
+  "killed",
+  "seriousInjuries",
+  "injury",
+  "street",
+  "crossStreet",
+  "lng",
+  "lat",
+] as const satisfies readonly (keyof CrashFeature)[];
 
 export interface Coverage {
   start: string;
@@ -27,8 +53,10 @@ export interface Coverage {
 export interface CrashTotals {
   crashes: number;
   fatalCrashes: number;
-  /** People killed. Null until person-level records are reconciled. */
-  fatalities: number | null;
+  /** People killed (died within 30 days). */
+  fatalities: number;
+  /** People seriously (incapacitatingly) injured. */
+  seriousInjuries: number;
   pedestrian: number;
   bicyclist: number;
 }

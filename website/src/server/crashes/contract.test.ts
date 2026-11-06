@@ -11,13 +11,13 @@ const coverage: Coverage = {
   excluded: { duplicate: 0, outsideWindow: 0, missingLocation: 0, outsideCounty: 0 },
 };
 
-const base = { time: "12:00", vehicles: 1, people: 1, lng: -84.28, lat: 30.45 };
+const base = { time: "12:00", vehicles: 1, people: 2, killed: 0, seriousInjuries: 0, injury: "none", street: "Main St", crossStreet: "", lng: -84.28, lat: 30.45 } as const;
 const source = createFileSource({
   coverage,
   crashes: [
-    { ...base, id: "1", date: "2020-01-01", severity: "nonfatal", roadUsers: ["motor_vehicle"], inCity: true },
-    { ...base, id: "2", date: "2020-06-30", severity: "fatal", roadUsers: ["motor_vehicle", "pedestrian"], inCity: true },
-    { ...base, id: "3", date: "2020-06-30", severity: "fatal", roadUsers: ["bicyclist"], inCity: false },
+    { ...base, id: "1", date: "2020-01-01", severity: "nonfatal", roadUsers: ["motor_vehicle"], inCity: true, seriousInjuries: 1, injury: "serious" },
+    { ...base, id: "2", date: "2020-06-30", severity: "fatal", roadUsers: ["motor_vehicle", "pedestrian"], inCity: true, killed: 2, injury: "fatal" },
+    { ...base, id: "3", date: "2020-06-30", severity: "fatal", roadUsers: ["bicyclist"], inCity: false, killed: 1, injury: "fatal" },
     { ...base, id: "4", date: "2020-12-31", severity: "nonfatal", roadUsers: ["motor_vehicle"], inCity: false },
   ],
 });
@@ -44,11 +44,12 @@ describe("crash source contract", () => {
   it("filters severity and road users", async () => {
     expect(await ids({ severity: "fatal" })).toEqual(["2", "3"]);
     expect(await ids({ severity: "nonfatal" })).toEqual(["1", "4"]);
+    expect(await ids({ severity: "serious" })).toEqual(["1", "2", "3"]);
     expect(await ids({ user: "pedestrian" })).toEqual(["2"]);
   });
 
-  it("counts fatal crashes, and leaves fatalities unknown", async () => {
+  it("counts crashes and people separately", async () => {
     const { totals } = await source.queryCrashes(all);
-    expect(totals).toEqual({ crashes: 4, fatalCrashes: 2, fatalities: null, pedestrian: 1, bicyclist: 1 });
+    expect(totals).toEqual({ crashes: 4, fatalCrashes: 2, fatalities: 3, seriousInjuries: 1, pedestrian: 1, bicyclist: 1 });
   });
 });

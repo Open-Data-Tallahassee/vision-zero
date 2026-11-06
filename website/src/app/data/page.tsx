@@ -53,12 +53,12 @@ export default async function DataPage({ searchParams }: { searchParams: Promise
         A crash is one event. It can involve several vehicles and several people. The map counts crashes. &ldquo;People involved&rdquo; on a crash counts everyone in it, including people who weren&rsquo;t hurt.
       </p>
       <p>
-        The map doesn&rsquo;t show the number of people killed yet; one crash that killed two people is still one dot. The person-level records have now been checked against the crashes, and the <a href="#downloads">downloads</a> include a count of people killed and injured on every crash, plus one row for each person.
+        People are counted separately, from the person records on each crash report: one crash that killed two people is one dot and two people killed. From {formatCoverage(coverage)}, {county.totals.fatalities} people were killed and {formatCount(county.totals.seriousInjuries)} seriously injured in Leon County; {city.totals.fatalities} of those deaths were inside Tallahassee city limits. &ldquo;Killed&rdquo; means the person died within 30 days of the crash.
       </p>
 
       <h2 id="fatal">Fatal and nonfatal</h2>
       <p>
-        A <strong>fatal crash</strong> is one in which at least one person died. A <strong>nonfatal crash</strong> is every other reported crash, whether or not someone was hurt. The map doesn&rsquo;t separate serious injuries from minor ones yet. The <a href="#downloads">downloads</a> include each person&rsquo;s injury severity as the officer recorded it.
+        A <strong className="font-medium">fatal crash</strong> is one in which at least one person died. A <strong className="font-medium">nonfatal crash</strong> is every other reported crash, whether or not someone was hurt. The <strong className="font-medium">Serious</strong> filter shows crashes where someone was killed or seriously injured, meaning an incapacitating injury as the officer recorded it. Vision Zero programs track this group, often called &ldquo;killed or seriously injured&rdquo;.
       </p>
       <p>
         From {formatCoverage(coverage)}, Leon County had {county.totals.fatalCrashes} fatal crashes; {city.totals.fatalCrashes} of them were inside Tallahassee city limits.

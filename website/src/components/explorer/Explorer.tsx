@@ -30,6 +30,18 @@ const ROAD_USER_TEXT: Record<CrashFeature["roadUsers"][number], string> = {
   motor_vehicle: "Motor vehicle",
 };
 
+const INJURY_TEXT: Record<CrashFeature["injury"], string> = {
+  fatal: "Fatal",
+  serious: "Serious injury",
+  minor: "Minor injury",
+  possible: "Possible injury",
+  none: "No injury",
+  unknown: "Not recorded",
+};
+
+// Where a crash happened, as the report gives it: "W Tennessee St at N Ocala Rd".
+const place = (c: CrashFeature) => (c.crossStreet ? `${c.street} at ${c.crossStreet}` : c.street);
+
 type Status = { kind: "loading" } | { kind: "ready" } | { kind: "error"; message: string };
 // What the last finished request returned, tagged with the query it answered.
 type Loaded = { key: string; ok: true } | { key: string; ok: false; message: string };
@@ -127,6 +139,7 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
       <div className="flex items-start justify-between gap-4">
         <h2 id="detail-heading" ref={detailRef} tabIndex={-1} className="text-lead">
           {selected.severity === "fatal" ? "Fatal crash" : "Crash"} on {formatDate(selected.date)}
+          {selected.street && <span className="mt-1 block text-body">{place(selected)}</span>}
         </h2>
         <button type="button" onClick={() => update({ crash: undefined })} className="min-h-11 px-3 text-small underline">Close</button>
       </div>
@@ -135,6 +148,9 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
         <div><dt className="text-small text-muted">Involved</dt><dd>{selected.roadUsers.map((u) => ROAD_USER_TEXT[u]).join(", ")}</dd></div>
         <div><dt className="text-small text-muted">Vehicles</dt><dd className="tabular-nums">{selected.vehicles}</dd></div>
         <div><dt className="text-small text-muted">People involved</dt><dd className="tabular-nums">{selected.people}</dd></div>
+        <div><dt className="text-small text-muted">Killed</dt><dd className={`tabular-nums ${selected.killed ? "text-fatal" : ""}`}>{selected.killed}</dd></div>
+        <div><dt className="text-small text-muted">Seriously injured</dt><dd className="tabular-nums">{selected.seriousInjuries}</dd></div>
+        <div className="col-span-2"><dt className="text-small text-muted">Most serious injury</dt><dd>{INJURY_TEXT[selected.injury]}</dd></div>
       </dl>
       <p className="mt-3 text-small text-muted">
         Report {selected.id}. &ldquo;People involved&rdquo; counts everyone in the crash, not only people hurt.{" "}
@@ -195,16 +211,16 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
 
             <fieldset>
               <legend className="text-body">Severity</legend>
-              <div className="mt-2 grid grid-cols-3 gap-[var(--gap)]">
+              <div className="mt-2 grid grid-cols-4 gap-[var(--gap)]">
                 {SEVERITIES.map((s) => (
                   <label key={s} className={`flex min-h-11 cursor-pointer items-center justify-center px-2 text-center text-small has-[:focus-visible]:outline has-[:focus-visible]:outline-2 ${severity === s ? (s === "fatal" ? "bg-fatal-dot text-[var(--map-paper)]" : "bg-ink text-ground") : "bg-surface-2"}`}>
                     <input type="radio" name="severity" value={s} checked={severity === s} onChange={() => update({ severity: s })} className="sr-only" />
-                    {s === "all" ? "All" : s === "fatal" ? "Fatal" : "Nonfatal"}
+                    {{ all: "All", fatal: "Fatal", serious: "Serious", nonfatal: "Nonfatal" }[s]}
                   </label>
                 ))}
               </div>
               <p className="mt-2 text-small text-muted">
-                Fatal means at least one person died. Injury severity isn&rsquo;t in this data yet.{" "}
+                Fatal: someone died within 30 days. Serious: someone died or was seriously injured. Nonfatal: no one died.{" "}
                 <Link href={`/data?returnTo=${returnTo}#fatal`} className="underline">More</Link>
               </p>
             </fieldset>
@@ -255,6 +271,14 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
               <dd className="text-head tabular-nums text-fatal">{formatCount(totals.fatalCrashes)}</dd>
             </div>
             <div>
+              <dt className="text-small text-muted">People killed</dt>
+              <dd className="text-lead tabular-nums text-fatal">{formatCount(totals.fatalities)}</dd>
+            </div>
+            <div>
+              <dt className="text-small text-muted">Seriously injured</dt>
+              <dd className="text-lead tabular-nums">{formatCount(totals.seriousInjuries)}</dd>
+            </div>
+            <div>
               <dt className="text-small text-muted">Involving a pedestrian</dt>
               <dd className="text-lead tabular-nums">{formatCount(totals.pedestrian)}</dd>
             </div>
@@ -264,7 +288,7 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
             </div>
           </dl>
           <p className="mt-4 text-small">
-            People killed: not counted yet.{" "}
+            One crash can kill or injure several people, so people and crashes are counted separately.{" "}
             <Link href={`/data?returnTo=${returnTo}#crashes-vs-people`} className="underline">About these numbers</Link>
           </p>
       </section>
@@ -366,7 +390,7 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
                 <tr className="border-b border-line">
                   <th scope="col" className="px-3 py-3 text-small font-normal text-muted">Date</th>
                   <th scope="col" className="px-3 py-3 text-small font-normal text-muted">Severity</th>
-                  <th scope="col" className="px-3 py-3 text-small font-normal text-muted">Involved</th>
+                  <th scope="col" className="px-3 py-3 text-small font-normal text-muted">Location</th>
                   <th scope="col" className="hidden px-3 py-3 text-right text-small font-normal text-muted sm:table-cell">People</th>
                   <th scope="col" className="px-3 py-3 text-small font-normal text-muted"><span className="sr-only">Details</span></th>
                 </tr>
@@ -374,13 +398,19 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
               <tbody>
                 {sorted.slice(0, shown).map((c) => (
                   <tr key={c.id} className={`border-b border-line ${c.id === state.crash ? "bg-accent text-accent-ink" : ""}`}>
-                    <td className="px-3 py-3 tabular-nums">{formatDate(c.date, "short")}<span className="block text-small text-muted sm:inline sm:pl-2 sm:text-body sm:text-ink">{c.time}</span></td>
-                    <td className={`px-3 py-3 ${c.severity === "fatal" ? "text-fatal" : ""}`}>{c.severity === "fatal" ? "Fatal" : "Nonfatal"}</td>
-                    <td className="px-3 py-3">{c.roadUsers.map((u) => ROAD_USER_TEXT[u]).join(", ")}</td>
+                    <td className="whitespace-nowrap px-3 py-3 tabular-nums">{formatDate(c.date, "short")}<span className="block text-small text-muted sm:inline sm:pl-2 sm:text-body sm:text-ink">{c.time}</span></td>
+                    <td className={`px-3 py-3 ${c.severity === "fatal" ? "text-fatal" : ""}`}>{INJURY_TEXT[c.injury]}</td>
+                    <td className="px-3 py-3">
+                      {place(c)}
+                      <span className="block text-small text-muted">{c.roadUsers.map((u) => ROAD_USER_TEXT[u]).join(", ")}</span>
+                    </td>
                     <td className="hidden px-3 py-3 text-right tabular-nums sm:table-cell">{c.people}</td>
                     <td className="px-3 py-3 text-right">
                       <button type="button" onClick={() => { onSelect(c.id); setMode("map"); }} className="min-h-11 px-2 text-small underline">
-                        Show on map<span className="sr-only">: crash on {formatDate(c.date)}</span>
+                        {/* "Map" on phones to save width; screen readers always hear "Show on map". */}
+                        <span aria-hidden="true" className="sm:hidden">Map</span>
+                        <span className="sr-only sm:not-sr-only">Show on map</span>
+                        <span className="sr-only">: crash on {formatDate(c.date)}, {place(c)}</span>
                       </button>
                     </td>
                   </tr>

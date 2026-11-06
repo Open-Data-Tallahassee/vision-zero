@@ -11,7 +11,8 @@ export function createFileSource(dataset: { coverage: Coverage; crashes: StoredC
     (f.geo === "leon" || c.inCity) &&
     c.date >= f.from &&
     c.date <= f.to &&
-    (f.severity === "all" || c.severity === f.severity) &&
+    (f.severity === "all" ||
+      (f.severity === "serious" ? c.injury === "fatal" || c.injury === "serious" : c.severity === f.severity)) &&
     (f.user === "all" || c.roadUsers.includes(f.user));
 
   const toPublic = (c: StoredCrash) => Object.fromEntries(CRASH_FIELDS.map((k) => [k, c[k]])) as unknown as CrashFeature;
@@ -27,7 +28,8 @@ export function createFileSource(dataset: { coverage: Coverage; crashes: StoredC
         totals: {
           crashes: features.length,
           fatalCrashes: features.filter((c) => c.severity === "fatal").length,
-          fatalities: null,
+          fatalities: features.reduce((n, c) => n + c.killed, 0),
+          seriousInjuries: features.reduce((n, c) => n + c.seriousInjuries, 0),
           pedestrian: features.filter((c) => c.roadUsers.includes("pedestrian")).length,
           bicyclist: features.filter((c) => c.roadUsers.includes("bicyclist")).length,
         },

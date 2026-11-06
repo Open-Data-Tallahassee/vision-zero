@@ -202,7 +202,7 @@ The table below tracks whether each item has been fixed. Update its Status as it
 | Item | Status |
 |---|---|
 | Date range on the map strip (P1) | done: the strip shows the active dates, and the map shows "Records end Jun 30, 2021" |
-| Crash location field (P1) | open, needs data work (Phase 2) |
+| Crash location field (P1) | done: street and cross street are the second line of the crash-details heading and a column in the list; people killed and seriously injured are shown on each crash |
 | Grayscale basemap, fatal on top, dot contrast, county fit (P1) | done: monochrome Standard basemap with a night version for dark mode; the old red roads are hidden; the city limits are tinted with the lichen accent; fatal dots draw on top; nonfatal dots reach about 3:1; dark mode has lighter dot colours; Leon County fits the county |
 | Phone detail as a bottom sheet (P2) | done: on phones in map view the detail floats as a card over the lower map, and the map pans the selected dot above it |
 | Home-page area labels and chart (P2) | done: the chart opens on Leon County, the pedestrian figure names Leon County, and the phone chart says "by quarter"; the period comes from `formatCoverage` |

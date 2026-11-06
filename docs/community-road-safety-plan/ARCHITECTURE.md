@@ -65,7 +65,7 @@ These facts come from reading the source. They explain why the architecture chan
 
 ```ts
 type Geography = "tallahassee" | "leon";
-type Severity = "all" | "fatal" | "nonfatal";   // "injury" only after severity codes are validated
+type Severity = "all" | "fatal" | "serious" | "nonfatal";   // serious = killed or seriously injured (KSI)
 type RoadUser = "all" | "pedestrian" | "bicyclist" | "motor_vehicle";
 
 interface MapState {
@@ -89,17 +89,20 @@ safeReturnTo(raw: string | null): string  // same-origin /map?… only, else "/m
 interface CrashFeature {   // the public DTO; nothing else leaves the server
   id: string;
   date: string;            // local date/time
-  severity: "fatal" | "nonfatal" | "unknown";
+  time: string;
+  severity: "fatal" | "nonfatal";
   roadUsers: RoadUser[];
-  fatalities: number | null;   // people killed, after person counts are validated
-  injuries: number | null;     // aggregate count only
-  street?: string; crossStreet?: string;
+  vehicles: number; people: number;
+  killed: number;              // people who died within 30 days (person records, injury code 5)
+  seriousInjuries: number;     // incapacitating injuries (code 4)
+  injury: "fatal" | "serious" | "minor" | "possible" | "none" | "unknown";   // most serious in the crash
+  street: string; crossStreet: string;   // title-cased for display; downloads keep the recorded spelling
   lng: number; lat: number;
 }
 
 interface CrashQueryResult {
   features: CrashFeature[];        // mapped crashes inside the geography
-  totals: { crashes: number; fatalCrashes: number; fatalities: number | null; unmapped: number };
+  totals: { crashes: number; fatalCrashes: number; fatalities: number; seriousInjuries: number; pedestrian: number; bicyclist: number };
   coverage: Coverage;              // periods available, known gaps, refresh date, boundary source
 }
 
@@ -296,7 +299,7 @@ Keep `website/.env.example` with names only.
 | --- | --- |
 | Whether to retire the old Vercel deployment | Nothing; housekeeping |
 | Authoritative city-limits boundary file and vintage | Tallahassee default view |
-| Which file holds validated severity and person counts | "Injury" filter, fatalities total |
+| Which file holds validated severity and person counts | Resolved 2026-11-06: the 2020 and 2021 person files (see `data/docs/INVENTORY.md`) |
 | Donation recipient and provider | `/support` donate button |
 | Request operator and inbox | Turning on request flags |
 | Policy publisher and contact | `/privacy`, `/terms` publication |

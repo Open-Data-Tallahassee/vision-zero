@@ -21,7 +21,7 @@ export default async function SupportPage() {
     >
       <h2>What&rsquo;s missing</h2>
       <p>
-        The map has crashes from {formatDate(coverage.start)} to {formatDate(coverage.end)}. Everything since then is missing, and so are the person-level records needed to count people killed and to separate serious injuries from minor ones.
+        The map has crashes from {formatDate(coverage.start)} to {formatDate(coverage.end)}. Everything since then is missing, including the person-level records that count people killed and separate serious injuries from minor ones.
       </p>
 
       <h2>What newer records would show</h2>

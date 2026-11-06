@@ -130,9 +130,6 @@ const coverage = {
   excluded,
 };
 
-mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, JSON.stringify({ coverage, crashes }));
-
 // People: one row per person on a crash report. Both source files overlap a little, so rows are keyed by
 // report and person number. Only people on crashes kept above are used.
 const kept = new Map(crashes.map((c) => [c.id, c]));
@@ -227,6 +224,25 @@ const publicCrashes = crashes.map((c) => {
   };
 });
 const inCity = new Set(crashes.filter((c) => c.inCity).map((c) => c.id));
+
+// The site's copy: street names in title case for reading (the downloads keep them as recorded),
+// and the most serious injury in the site's own words.
+const KEEP_UPPER = new Set(["NE", "NW", "SE", "SW", "US", "SR", "CR", "FL", "MM", "EB", "WB", "NB", "SB", "II", "III"]);
+const titleCase = (s) => s.replace(/[A-Z][A-Z']+/g, (w) => (KEEP_UPPER.has(w) ? w : w[0] + w.slice(1).toLowerCase()));
+const SITE_INJURY = { fatal: "fatal", incapacitating: "serious", non_incapacitating: "minor", possible: "possible", none: "none", unknown: "unknown", "": "unknown" };
+const siteCrashes = crashes.map((c, i) => {
+  const p = publicCrashes[i];
+  return {
+    ...c,
+    killed: p.killed || 0,
+    seriousInjuries: p.incapacitating_injuries || 0,
+    injury: SITE_INJURY[p.most_severe_injury],
+    street: titleCase(p.street),
+    crossStreet: titleCase(p.cross_street),
+  };
+});
+mkdirSync(dirname(OUT), { recursive: true });
+writeFileSync(OUT, JSON.stringify({ coverage, crashes: siteCrashes }));
 
 const csvCell = (v) => {
   const s = String(v);

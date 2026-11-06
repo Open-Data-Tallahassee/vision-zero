@@ -138,7 +138,7 @@ The site reads like a civic annual report printed on good paper. It is serious, 
 
 The map is the product, and it follows the same idea: a monochrome basemap (Mapbox Standard, monochrome theme), the city limits tinted with moss, and coloured dots on top. In dark mode the whole system, map included, moves to a near-black ground. Some colours keep their meaning and only lighten enough to stay readable.
 
-The copy is part of the design. Sentences are plain, numbers say what they count and what area they cover, and the limits of the data are stated where people look ("People killed: not counted yet"). New screens should keep that voice.
+The copy is part of the design. Sentences are plain, numbers say what they count and what area they cover, and the limits of the data are stated where people look ("Records end Jun 30, 2021", "One crash can kill or injure several people"). New screens should keep that voice.
 
 **Key Characteristics:**
 - Flat tiles, an 8px gap, no radius, no shadows except the floating crash card.
