@@ -1,0 +1,56 @@
+// Community request pathways. Crash data is not stored here yet (see ARCHITECTURE.md, Phase 9).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  // .ts extensions let `node` run scripts/retention.ts against the client directly.
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RequestStatus {
+  NEW
+  REVIEWED
+  ANSWERED
+  CLOSED
+}
+
+model CityRequest {
+  id                   String        @id @default(cuid())
+  city                 String
+  email                String?
+  message              String?
+  ongoingCollaboration Boolean       @default(false)
+  status               RequestStatus @default(NEW)
+  termsVersion         String
+  privacyVersion       String
+  acceptedAt           DateTime
+  submittedAt          DateTime      @default(now())
+  /// Contact details and free text are removed after this date unless collaboration continues.
+  deleteAfter          DateTime
+
+  @@index([deleteAfter])
+  @@index([city])
+}
+
+model DataRequest {
+  id                   String        @id @default(cuid())
+  geography            String
+  dateFrom             DateTime      @db.Date
+  dateTo               DateTime      @db.Date
+  description          String
+  email                String
+  intendedUse          String?
+  ongoingCollaboration Boolean       @default(false)
+  status               RequestStatus @default(NEW)
+  termsVersion         String
+  privacyVersion       String
+  acceptedAt           DateTime
+  submittedAt          DateTime      @default(now())
+  deleteAfter          DateTime
+
+  @@index([deleteAfter])
+}

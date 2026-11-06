@@ -1,38 +1,31 @@
-// import CrashMap from "@/components/CrashMap";
-import Header from "@/components/Header";
-import Navbar from "@/components/Navbar";
+import type { Metadata } from "next";
+import Link from "next/link";
+import TextPage from "@/components/site/TextPage";
 
-export default async function About() {
+export const metadata: Metadata = {
+  title: "About",
+  description: "Vision Zero TLH is a free community crash map made by Open Tallahassee volunteers.",
+  alternates: { canonical: "/about" },
+};
+
+export default function AboutPage() {
   return (
-    <div className="flex flex-col w-screen min-h-screen ">
-      <Header />
-      <Navbar />
-      <div className="flex flex-col items-center justify-center px-10 ">
-        <div className="text-4xl font-bold py-10">About this site</div>
-        <div className="flex flex-col text-lg px-10 gap-6">
-          <span>
-            <a
-              href="https://www.opentlh.com/"
-              className="text-blue-500 hover:underline"
-            >
-              Open Tallahassee
-            </a>
-            &nbsp;is an open journalism project, powered by residents who just
-            want to keep their neighbors informed & connected - without diving
-            into the rabbit hole of political conspiracies or drama.
-          </span>
-          <span>
-            Open Tallahassee started at a Tallahassee coffee shop, where its
-            founding members talked about making a public map of traffic
-            crashes, this map.
-          </span>
-          <span>
-            Join us in making Tallahassee a safer place—one click at a time.
-            Explore our crash map, share your insights, and help us continue our
-            mission of keeping our community informed.
-          </span>
-        </div>
-      </div>
-    </div>
+    <TextPage photo={2} title="About this site" lead={<p>A free crash map made by neighbors, for neighbors.</p>}>
+      <p>
+        <a href="https://www.opentlh.com/">Open Tallahassee</a> is an open journalism project run by residents who want to keep their neighbors informed and connected, without the political drama.
+      </p>
+      <p>It started at a Tallahassee coffee shop, where a few of us talked about making a public map of traffic crashes. This is that map.</p>
+
+      <h2>What we&rsquo;re trying to do</h2>
+      <p>Make crash records easy for anyone to read, explain them honestly, and keep them free. We&rsquo;re not a government agency, and this isn&rsquo;t an official source.</p>
+
+      <h2>How to take part</h2>
+      <ul>
+        <li><Link href="/map">Explore the map</Link> and share what you find with your neighbors.</li>
+        <li><Link href="/cities/request">Ask for a map of your Florida city</Link>.</li>
+        <li><Link href="/support">Support updated data</Link>.</li>
+        <li>The code is open. Help on <a href="https://github.com/Open-Data-Tallahassee/vision-zero">GitHub</a>.</li>
+      </ul>
+    </TextPage>
   );
 }

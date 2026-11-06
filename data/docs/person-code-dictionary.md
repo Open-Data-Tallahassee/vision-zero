@@ -2,6 +2,8 @@
 
 This is the key file of the relational database that FLHSMV uses for their crash reports. This is an amalgamate of their driver, passenger, and non-motorist tables.
 
+Source: the crash data dictionary on a CD supplied by the Florida Department of Highway Safety and Motor Vehicles (FLHSMV) with its crash report data.
+
 | **No.** | **Data Element**               | **Description**                                                            | **Code** | **Code description**                                                                          |
 |---------|--------------------------------|----------------------------------------------------------------------------|----------|-----------------------------------------------------------------------------------------------|
 | 1       | Report Number                  | 8 character DHSMV-assigned report ID                                       |          |                                                                                               |

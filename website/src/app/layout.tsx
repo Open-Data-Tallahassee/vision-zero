@@ -1,50 +1,55 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
+import RiseObserver from "@/components/site/RiseObserver";
+import SiteFooter from "@/components/site/SiteFooter";
+import SiteHeader from "@/components/site/SiteHeader";
+import { SITE } from "@/config/site";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const boska = localFont({
+  src: [
+    { path: "./fonts/Boska-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Boska-Italic.woff2", weight: "400", style: "italic" },
+    { path: "./fonts/Boska-Medium.woff2", weight: "500", style: "normal" },
+  ],
+  variable: "--font-boska",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Vision Zero TLH",
-  description:
-    "Tracking and visualizing traffic accidents, injuries, and fatalities in Tallahassee, FL",
+  metadataBase: new URL(SITE.url),
+  title: { default: `${SITE.name}: traffic crash map and data`, template: `%s · ${SITE.name}` },
+  description: SITE.description,
+  applicationName: SITE.name,
   openGraph: {
-    title: "Vision Zero TLH",
-    description:
-      "Tracking and visualizing traffic accidents, injuries, and fatalities in Tallahassee, FL",
-    url: "https://vision-zero-tlh.vercel.app",
-    siteName: "Vision Zero TLH",
-    images: [
-      {
-        url: "https://open-tallahassee.s3.us-east-1.amazonaws.com/Vision-Zero-logo-transparent-2.png", // Must be an absolute URL
-        width: 500,
-        height: 500,
-      },
-    ],
+    siteName: SITE.name,
     locale: "en_US",
     type: "website",
   },
+  twitter: { card: "summary_large_image" },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: "#1f3a2b",
+  colorScheme: "light dark",
+};
+
+// Runs before first paint: saved choice, else the system setting.
+const THEME_SCRIPT = `try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t}catch(e){}`;
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="en" id="top" className={boska.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
+      <body className="flex min-h-screen flex-col" suppressHydrationWarning>
+        <SiteHeader />
+        <main id="main" className="flex-1">
+          {children}
+        </main>
+        <SiteFooter />
+        <RiseObserver />
       </body>
     </html>
   );

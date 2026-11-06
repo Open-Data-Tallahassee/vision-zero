@@ -49,3 +49,9 @@ data/leon-county-events-2010-2021.csv
 data/leon-county-crashes/2020/raw/
 data/leon-county-crashes/2021-q1-and-q2/raw/
 vision-zero.code-workspace
+.taste-skill/
+.impeccable/
+
+# Source files with personal details (age, sex, home ZIP). Kept locally, never published.
+data/private/*
+!data/private/README.md

@@ -1,0 +1,13 @@
+{
+  "start": "2020-01-01",
+  "end": "2021-06-30",
+  "source": "Florida Department of Highway Safety and Motor Vehicles (FLHSMV) crash records, Leon County",
+  "boundaries": "U.S. Census Bureau TIGERweb, January 1, 2021 vintage (Leon County GEOID 12073; Tallahassee city GEOID 1270600)",
+  "sourceRecords": 12743,
+  "excluded": {
+    "duplicate": 0,
+    "outsideWindow": 164,
+    "missingLocation": 0,
+    "outsideCounty": 1
+  }
+}
