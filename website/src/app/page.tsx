@@ -44,7 +44,7 @@ export default async function Home() {
           <PhotoCredit src={photo.woodward.src} />
         </div>
         <div className="drift relative hidden overflow-hidden bg-surface-2 lg:block">
-          <Image src={photo.famu.src} alt={photo.famu.alt} fill sizes="50vw" className="object-cover grayscale contrast-[1.05]" />
+          <Image src={photo.famu.src} alt={photo.famu.alt} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover grayscale contrast-[1.05]" />
           <PhotoCredit src={photo.famu.src} />
         </div>
         <div className="grid grid-cols-2 gap-[var(--gap)]">
@@ -163,8 +163,8 @@ export default async function Home() {
         </p>
         <div className="mt-[72px] grid gap-4 lg:grid-cols-12">
           <div className="relative aspect-[4/3] overflow-hidden bg-surface-2 lg:col-span-8 lg:aspect-[16/10]">
-            <Image src={photo.fourth.src} alt={photo.fourth.alt} fill sizes="(min-width: 1024px) 66vw, 100vw" className="object-cover grayscale contrast-[1.05]" style={{ objectPosition: "50% 70%" }} />
-          <PhotoCredit src={photo.fourth.src} />
+            <Image src={photo.famu.src} alt={photo.famu.alt} fill sizes="(min-width: 1024px) 66vw, 100vw" className="object-cover grayscale contrast-[1.05]" style={{ objectPosition: "50% 70%" }} />
+          <PhotoCredit src={photo.famu.src} />
             <p className="absolute right-0 top-0 hidden w-[320px] bg-ground p-5 text-body lg:block">
               Locations come from the officer&rsquo;s report. A crash with no usable location is counted in the totals on the data page, never guessed onto the map.
             </p>

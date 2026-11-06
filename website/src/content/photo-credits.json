@@ -86,5 +86,16 @@
     "width": 1920,
     "height": 1440,
     "alt": "A downtown street under a live oak with red signals and a crosswalk at Adams Street and Virginia Street"
+  },
+  {
+    "src": "/images/althea-osceola.jpg",
+    "title": "Traffic light at Althea Gibson Way and Osceola Street (cropped and displayed in grayscale)",
+    "creator": "The Bushranger",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Traffic_light_at_Althea_Gibson_Way_and_Osceola_Street.jpg",
+    "width": 3264,
+    "height": 2448,
+    "alt": "Traffic lights over Althea Gibson Way at Osceola Street on the FAMU campus"
   }
 ]
