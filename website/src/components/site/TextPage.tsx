@@ -26,11 +26,14 @@ export default function TextPage({
     <article className="pb-[clamp(5rem,10vw,9rem)]">
       <div className="grid gap-[var(--gap)] lg:grid-cols-[42%_minmax(0,1fr)] lg:gap-0">
         <div className="lg:p-[var(--gap)] lg:pr-12">
-          <div className="relative mx-[var(--gap)] mt-[var(--gap)] h-[22svh] overflow-hidden bg-surface-2 lg:sticky lg:top-[var(--gap)] lg:mx-0 lg:mt-0 lg:h-auto lg:aspect-[4/5]">
-            <Image src={p.src} alt={p.alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover grayscale contrast-[1.05]" />
-            <PhotoCredit src={p.src} />
+          {/* The photo and side notes stick together; the photo gives up height so the notes always fit on screen. */}
+          <div className="lg:sticky lg:top-[var(--gap)] lg:flex lg:max-h-[calc(100svh-2*var(--gap))] lg:flex-col">
+            <div className={`relative mx-[var(--gap)] mt-[var(--gap)] h-[22svh] overflow-hidden bg-surface-2 lg:mx-0 lg:mt-0 lg:h-auto ${aside ? "lg:min-h-[12rem] lg:flex-1" : "lg:aspect-[4/5]"}`}>
+              <Image src={p.src} alt={p.alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover grayscale contrast-[1.05]" />
+              <PhotoCredit src={p.src} />
+            </div>
+            {aside && <div className="mt-6 hidden shrink-0 pl-5 lg:block">{aside}</div>}
           </div>
-          {aside && <div className="mt-8 hidden pl-5 lg:block">{aside}</div>}
         </div>
         <div className="page-frame pt-8 lg:pl-0 lg:pt-[clamp(3rem,7vw,6rem)]">
           {returnTo && (

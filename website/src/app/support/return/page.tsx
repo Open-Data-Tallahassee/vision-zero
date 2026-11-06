@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 // never says a donation succeeded; confirmation comes from the provider's own receipt.
 export default function SupportReturnPage() {
   return (
-    <TextPage photo={1} title="Back from the donation page">
+    <TextPage photo={7} title="Back from the donation page">
       <p>If you completed a donation, your payment provider will send a receipt by email. That receipt is the confirmation. Thank you.</p>
       <p>If you canceled, that&rsquo;s fine. Nothing on this site changes either way.</p>
       <p className="!mt-8 flex flex-wrap gap-[var(--gap)]">

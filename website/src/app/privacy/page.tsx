@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   const v = POLICY_VERSIONS.privacy;
   return (
-    <TextPage photo={3} title="Privacy Policy" lead={<p>Version {v.version}. {v.effective ? `Effective ${v.effective}.` : "Draft: this text hasn't been approved by the publisher yet."}</p>}>
+    <TextPage photo={5} title="Privacy Policy" lead={<p>Version {v.version}. {v.effective ? `Effective ${v.effective}.` : "Draft: this text hasn't been approved by the publisher yet."}</p>}>
       <h2>Who runs this site</h2>
       <p>Vision Zero TLH is published by volunteers with <a href="https://www.opentlh.com/">Open Tallahassee</a>. A privacy contact will be listed here before any form opens.</p>
 

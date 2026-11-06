@@ -25,8 +25,8 @@ export default async function DataPage({ searchParams }: { searchParams: Promise
       lead={<p>What&rsquo;s on the map, where it comes from, and what it can&rsquo;t tell you yet.</p>}
       returnTo={returnTo ? safeReturnTo(returnTo) : undefined}
       aside={
-        <nav aria-label="On this page" className="mt-8 hidden lg:block">
-          <ul className="space-y-2 text-body">
+        <nav aria-label="On this page" className="hidden lg:block">
+          <ul className="space-y-1.5 text-body">
             <li><a href="#reading-the-map" className="text-link">Reading the map</a></li>
             <li><a href="#crashes-vs-people" className="text-link">Crashes and people</a></li>
             <li><a href="#fatal" className="text-link">Fatal and nonfatal</a></li>
