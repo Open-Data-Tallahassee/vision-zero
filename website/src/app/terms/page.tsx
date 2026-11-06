@@ -18,13 +18,24 @@ export default function TermsPage() {
 
       <h2>About the data</h2>
       <p>
-        The map shows reported crashes from Florida Department of Highway Safety and Motor Vehicles records for a limited period. It may be incomplete and isn&rsquo;t a measure of how risky a road is. Read <Link href="/data">Understand the data</Link> before relying on it.
+        The map and the downloads show reported crashes from Florida Department of Highway Safety and Motor Vehicles records for a limited period. They may be incomplete and aren&rsquo;t a measure of how risky a road is. They&rsquo;re provided as is, without any warranty. Read <Link href="/data">Understand the data</Link> before relying on them.
       </p>
 
       <h2>Using the site</h2>
       <ul>
-        <li>Use it lawfully, and don&rsquo;t try to disrupt it or scrape it. The <Link href="/data#downloads">downloads</Link> have the same data.</li>
-        <li>The downloads are published under CC BY 4.0: you can reuse them for anything if you credit the source as the data page describes. For anything they don&rsquo;t cover, <Link href="/data/request">request it</Link>.</li>
+        <li>Use it lawfully, and don&rsquo;t try to disrupt it.</li>
+        <li>Don&rsquo;t scrape the map or its data service. The <Link href="/data#downloads">downloads</Link> have the same data.</li>
+      </ul>
+
+      <h2>Using the downloads</h2>
+      <ul>
+        <li>
+          The downloads are published under <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 (CC BY 4.0)</a>. You can share and adapt them for any purpose, including commercial use, if you give credit: &ldquo;Vision Zero TLH (Open Tallahassee), from Florida Department of Highway Safety and Motor Vehicles crash records&rdquo;.
+        </li>
+        <li>Don&rsquo;t use the data, alone or combined with other information, to try to identify the people involved in a crash.</li>
+        <li>
+          Every field is explained in the <a href="https://github.com/Open-Data-Tallahassee/vision-zero/tree/main/data/public">data guide</a>. For anything the downloads don&rsquo;t cover, <Link href="/data/request">request it</Link>.
+        </li>
       </ul>
 
       <h2>Requests</h2>

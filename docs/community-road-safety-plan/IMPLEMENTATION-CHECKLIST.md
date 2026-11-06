@@ -27,7 +27,7 @@ Rules for every phase:
 ```
 Phase: first implementation pass done on branch feat/community-site (not merged)
 Next box: show people killed, injury severity and street names on the map (the data is ready), then open a PR and check the Netlify deploy preview
-Blocked on: Netlify env vars for the forms (DATABASE_URL, ENABLE_*), donation recipient (8.x). Policies approved 2026-11-06.
+Blocked on: Netlify env vars for the forms (DATABASE_URL, ENABLE_*), donation recipient (8.x). Policies approved 2026-11-06; Terms updated to version 2026-11-06.2 for public downloads.
 Last updated: 2026-11-06
 Deferred until after merge: DONATION_URL (skipped for now), confirm privacy@opentlh.com receives mail, Lighthouse, Search Console sitemap
 TODO: privacy contact is privacy@opentlh.com for now; confirm or replace it (website/src/app/privacy/page.tsx)
@@ -96,7 +96,7 @@ Goal: know exactly what data you have. Every number on the site depends on this.
 
 - [x] 2.1 List every file in `data/` and the ArcGIS layer: period, row count, key fields, and whether it has severity and person fields. Write it to `data/docs/INVENTORY.md`. Done 2026-11-06; there is no ArcGIS layer any more.
 - [x] 2.2 Check uniqueness of `report_number` within and across files. Record duplicates and how you resolved them.
-- [x] 2.3 Find which file(s) contain severity codes and person-level injury and fatality data. Write down the FLHSMV code meanings, citing the source. Done 2026-11-06: the 2020 and 2021 person files in `data/leon-county-crashes/*/processed/` (see INVENTORY.md). Codes are in `data/docs/person-code-dictionary.md`. The source document's name and date weren't recorded and still need adding.
+- [x] 2.3 Find which file(s) contain severity codes and person-level injury and fatality data. Write down the FLHSMV code meanings, citing the source. Done 2026-11-06: the 2020 and 2021 person files in `data/leon-county-crashes/*/processed/` (see INVENTORY.md). Codes are in `data/docs/person-code-dictionary.md`. Source: the crash data dictionary on a CD supplied by FLHSMV.
 - [x] 2.4 Compute, by quarter: crashes, fatal crashes, fatalities (people), crashes missing coordinates. Compare against ArcGIS for the same quarters. Done 2026-11-06 in COVERAGE-REPORT.md. ArcGIS is gone, so the check is crash records against person records: all 39 fatal crashes match, 43 people were killed, and 172 were seriously injured.
 - [x] 2.5 Get the Tallahassee city-limits boundary (source and vintage). Count crashes in the city, county-only, and undetermined.
 - [x] 2.6 Write `data/docs/COVERAGE-REPORT.md`: periods covered, gaps, the last complete date, and a list of missing periods to use when asking for acquisition quotes.

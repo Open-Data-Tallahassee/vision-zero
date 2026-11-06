@@ -52,7 +52,7 @@ The injury severity codes the site uses are:
 | 5 | Fatal (within 30 days) | killed |
 | 6 | Non-traffic fatality | not counted as killed |
 
-The dictionaries were transcribed from FLHSMV's crash data dictionary for its crash report database. The name and date of that source document weren't recorded when it was transcribed; add them here when known.
+The dictionaries were transcribed from the crash data dictionary on a CD that FLHSMV supplied with its crash report data. The tables in `docs/codes/` come from the same source.
 
 ## What the files can and can't support
 
