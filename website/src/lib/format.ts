@@ -1,4 +1,5 @@
-export const formatCount = (n: number) => n.toLocaleString("en-US");
+export const formatCount = (n: number | null | undefined) =>
+  typeof n === "number" && Number.isFinite(n) ? n.toLocaleString("en-US") : "—";
 
 export const formatDate = (iso: string, month: "long" | "short" = "long") =>
   new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month, day: "numeric", year: "numeric", timeZone: "UTC" });
