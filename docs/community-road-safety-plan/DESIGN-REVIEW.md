@@ -9,7 +9,7 @@ Checklist item 5.1. This is an `/impeccable critique` of the rendered site at ht
   - B is the detector scan, a browser overlay, and contrast and overflow measurements.
 - **"Before" screenshots (0.6):** none exist, so there is no before/after comparison.
 
-**Score: 27/40.** That sits at the top of the "acceptable" band.
+**Score: 27/40.** That sits at the top of the "acceptable" band. The score is from the first run, before any fixes. The Follow-up table at the end tracks what has been fixed since; a fresh critique would give a new score.
 
 ## Verdict
 
@@ -204,7 +204,7 @@ The table below tracks whether each item has been fixed. Update its Status as it
 | Date range on the map strip (P1) | done: the strip shows the active dates, and the map shows "Records end Jun 30, 2021" |
 | Crash location field (P1) | open, needs data work (Phase 2) |
 | Grayscale basemap, fatal on top, dot contrast, county fit (P1) | done: monochrome Standard basemap with a night version for dark mode; the old red roads are hidden; the city limits are tinted with the lichen accent; fatal dots draw on top; nonfatal dots reach about 3:1; dark mode has lighter dot colours; Leon County fits the county |
-| Phone detail as a bottom sheet (P2) | done: on phones in map view the detail covers the bottom of the map, and the map pans the selected dot above it |
+| Phone detail as a bottom sheet (P2) | done: on phones in map view the detail floats as a card over the lower map, and the map pans the selected dot above it |
 | Home-page area labels and chart (P2) | done: the chart opens on Leon County, the pedestrian figure names Leon County, and the phone chart says "by quarter"; the period comes from `formatCoverage` |
 | 404 button covered by a tile (P2) | done: rows grow with their content; checked at 1280×800 |
 | Mapbox logo covered by the phone sheet | done: the sheet floats 40px above the map's bottom edge, so the logo and attribution stay visible |
