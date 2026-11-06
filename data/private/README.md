@@ -11,3 +11,5 @@ The public, de-identified versions are in `data/public/`. Keep originals here wh
 ## `original/`
 
 A full copy of `data/` (all files, notebooks and the code dictionaries) and of `website/scripts/build-crash-data.mjs`, taken on 2026-11-06 before the Phase 2 data work changed anything. It keeps the original folder layout, including `quarterly-tranches/leon-people-2019-q2.csv`. Nothing in it is published.
+
+On 2026-11-06 the files the site doesn't use were deleted from `data/` (see `docs/INVENTORY.md` › Removed from the public repo). `original/` is the only local copy of them.
