@@ -27,7 +27,7 @@ Rules for every phase:
 ```
 Phase: first implementation pass done on branch feat/community-site (not merged)
 Next box: open a PR and check the Netlify deploy preview (map tiles could not be checked locally), then 0.3, 1.2, 2.1, 2.3, 2.4, 5.1, 5.2
-Blocked on: Neon provisioning (7.1, 7.2), policy approval (R1.1, 7.8), donation recipient (8.x)
+Blocked on: Neon migrations (7.2; the Neon database now exists), policy approval (R1.1, 7.8), donation recipient (8.x)
 Last updated: 2026-11-06
 ```
 
@@ -38,6 +38,7 @@ Last updated: 2026-11-06
 - **Severity:** the data has only a fatal flag. Filters are All, Fatal and Nonfatal; "people killed" shows as not counted yet.
 - **No `netlify.toml`.** Netlify's UI build settings already work. Preview indexing is blocked by `robots.ts`, which checks `CONTEXT`.
 - **Prisma 7.10.1** (stable; `latest` on npm points at an 8.0 release candidate) with the Neon HTTP adapter.
+- **Name and polish (commit 3b65442):** the site is "Vision Zero TLH" everywhere it names itself (header, hero, footer, titles, manifest, share image). Every photo shows an on-image credit (`PhotoCredit`, data in `src/content/photo-credits.json`) and the footer lists full credits. Dark mode: `data-theme` on `<html>`, set by an inline head script from the saved or system preference; `ThemeToggle` in the header. The map basemap and dot colours stay the same in both themes. A custom 404 (`src/app/not-found.tsx`) returns a real 404 status.
 - **Phase 5 used the design-taste-frontend skill** (direction "The printed annual", seed 676698518) and its inspector. The `/impeccable` critique (5.1) and `website/DESIGN.md` (5.2) are still to do.
 
 ## Progress log
@@ -46,6 +47,7 @@ Last updated: 2026-11-06
 | --- | --- | --- | --- |
 | 2026-11-06 | — | Architecture and checklist written | e6e8012 |
 | 2026-11-06 | 0–8 (partial) | Tooling; file-based crash data with Census boundaries and coverage report; map-state and queryCrashes; mobile-first redesign of all pages; explorer; data, support, about, draft policies; SEO and icons; Prisma request pathways behind flags; retention script. 29 tests pass; lint clean; build passes. Baseline build failed because ArcGIS is dead. | ca1d109..eb33edf |
+| 2026-11-06 | 5 (polish) | Renamed to Vision Zero TLH; photo credits on images; dark mode with toggle; custom 404. tsc, lint, 29 tests and build pass. | 3b65442 |
 
 ---
 

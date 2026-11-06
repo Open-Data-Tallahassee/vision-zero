@@ -218,14 +218,14 @@ People will search for things like "Tallahassee traffic crashes", "Leon County f
 
 - **Root `layout.tsx`:**
   - Set `metadataBase: new URL("https://visionzero.opentlh.com")`.
-  - Use the title template `"%s · Vision Zero Tallahassee"`, with "Vision Zero Tallahassee" as the default title.
+  - Use the title template `"%s · Vision Zero TLH"`, with "Vision Zero TLH" as the default title.
   - Set a default description, `openGraph` (`siteName`, `locale: "en_US"`) and `twitter: { card: "summary_large_image" }`.
   - Remove the hardcoded vercel.app URL.
 - **Each page** exports its own `metadata` or `generateMetadata` with a specific title, a description of about 150 characters, and `alternates.canonical`.
 
 | Route | Title | Index? |
 | --- | --- | --- |
-| `/` | Vision Zero Tallahassee: traffic crash map and data | yes |
+| `/` | Vision Zero TLH: Tallahassee traffic crash map and data | yes |
 | `/map` | Tallahassee crash map | yes; canonical `/map` without filter params |
 | `/data` | Understanding Tallahassee crash data | yes |
 | `/cities/request` | Request a crash map for your Florida city | yes |
@@ -302,3 +302,9 @@ Keep `website/.env.example` with names only.
 | Policy publisher and contact | `/privacy`, `/terms` publication |
 | Final logo mark for the favicon | Favicon set (a placeholder icon can ship in Phase 1) |
 | Who owns Google Search Console for the domain | Sitemap submission, indexing checks |
+
+## Theme, credits and error pages
+
+- **Dark mode.** Colours are CSS variables in `globals.css`. `:root[data-theme="dark"]` overrides them. An inline script in `<head>` sets `data-theme` from `localStorage` or the system setting before first paint. `ThemeToggle` (header) saves the choice. Without JavaScript the site stays light. The map basemap and dot colours are the same in both themes so the legend always matches; a dark Mapbox style is a possible later change.
+- **Photo credits.** One source of truth: `src/content/photo-credits.json` (author, licence, links). `PhotoCredit` renders the on-image chip; the footer lists full titles. Add the entry first when adding any photograph.
+- **404.** `src/app/not-found.tsx` is a tile board in the site's style with links to the main pages and a "report a broken link" link to GitHub issues.

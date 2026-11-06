@@ -34,3 +34,11 @@ The request pages are rendered at build time, so redeploy after changing a flag.
 ## Donations
 
 Set `DONATION_URL` (https only) in Netlify to show the donate button on `/support`. Point the provider's return URL at `https://visionzero.opentlh.com/support/return`. That page never claims a payment succeeded; the provider's receipt is the confirmation.
+
+## Photographs
+
+Add the file to `website/public/images/`, add its author, licence and links to `website/src/content/photo-credits.json`, and show it with `<PhotoCredit src=... />` inside a `relative` container. Only use images whose licence allows reuse with credit.
+
+## Dark mode and the map
+
+Dark mode is automatic (system setting) and togglable in the header. The map stays light in both themes. To make it follow the theme, create a dark Mapbox style and switch the style URL in `CrashMapView` when `data-theme` changes.
