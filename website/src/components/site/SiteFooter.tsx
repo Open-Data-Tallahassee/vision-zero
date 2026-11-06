@@ -71,21 +71,30 @@ export default function SiteFooter() {
           ))}
         </nav>
       </div>
-      <div className="page-frame flex flex-col gap-3 pb-8 pt-12 text-small sm:flex-row sm:justify-between">
-        <p className="max-w-[80ch]">
-          Free for everyone. Not a government website. Crash records: Florida Department of Highway Safety and Motor Vehicles.
-          Photographs:{" "}
-          {credits.map((c, i) => (
-            <span key={c.src}>
-              <a href={c.page} className="underline">
-                {c.title}
-              </a>{" "}
-              by {c.creator}, <a href={c.licenseUrl} className="underline">{c.license}</a>
-              {i < credits.length - 1 ? "; " : "."}
-            </span>
-          ))}
-        </p>
-        <a href="#top" className="shrink-0 underline">
+      <div className="page-frame flex flex-col gap-8 pb-8 pt-12 text-small">
+        <p className="max-w-[80ch]">Free for everyone. Not a government website. Crash records: Florida Department of Highway Safety and Motor Vehicles.</p>
+        <div>
+          <h3 className="text-body text-accent">Photographs</h3>
+          <p className="mt-2 max-w-[80ch]">
+            All by {credits[0].creator}, licensed <a href={credits[0].licenseUrl} className="underline">{credits[0].license}</a>.
+          </p>
+          <ul className="mt-3 grid gap-x-8 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-4">
+            {credits.map((c) => (
+              <li key={c.src}>
+                <a href={c.page} className="underline">
+                  {c.title}
+                </a>
+                {(c.creator !== credits[0].creator || c.license !== credits[0].license) && (
+                  <>
+                    {" "}
+                    by {c.creator}, <a href={c.licenseUrl} className="underline">{c.license}</a>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <a href="#top" className="shrink-0 self-start underline sm:self-end">
           Back to top
         </a>
       </div>
