@@ -15,9 +15,10 @@ const LINKS = [
 ];
 
 // A board of four tiles like the overview. On a phone: the message and the main action first.
+// Rows are plain 1fr (auto minimum) so a tall message grows its row instead of spilling under the next tile.
 export default function NotFound() {
   return (
-    <section aria-labelledby="not-found" className="grid gap-[var(--gap)] p-[var(--gap)] md:h-[calc(100svh-60px-2*var(--gap))] md:min-h-[640px] md:grid-cols-2 md:grid-rows-2">
+    <section aria-labelledby="not-found" className="grid gap-[var(--gap)] p-[var(--gap)] md:min-h-[max(640px,calc(100svh-60px-2*var(--gap)))] md:grid-cols-2 md:grid-rows-[1fr_1fr]">
       <div className="flex min-h-[52svh] flex-col justify-between bg-surface p-5 sm:p-6 md:order-2 md:min-h-0">
         <p aria-hidden="true" className="text-display tabular-nums">
           404

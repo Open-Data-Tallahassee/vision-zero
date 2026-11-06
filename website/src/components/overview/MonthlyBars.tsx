@@ -35,8 +35,9 @@ function Toggle<T extends string>({ label, value, options, onChange }: { label: 
   );
 }
 
-export default function MonthlyBars({ monthly }: { monthly: MonthlyByGeography }) {
-  const [geo, setGeo] = useState<Geography>("tallahassee");
+// Opens on Leon County so it agrees with the county figures above it on the overview.
+export default function MonthlyBars({ monthly, period }: { monthly: MonthlyByGeography; period: string }) {
+  const [geo, setGeo] = useState<Geography>("leon");
   const [measure, setMeasure] = useState<Measure>("fatalCrashes");
   const [active, setActive] = useState<string | null>(null);
 
@@ -72,7 +73,10 @@ export default function MonthlyBars({ monthly }: { monthly: MonthlyByGeography }
           <h2 id="by-month" className="mt-3 text-[clamp(1.375rem,1rem+1vw,1.75rem)] leading-tight">
             {MEASURES[measure].label.toLowerCase()} in {geo === "leon" ? "Leon County" : "Tallahassee city limits"}
           </h2>
-          <p className="mt-1 text-body">January 2020 to June 2021, by month</p>
+          <p className="mt-1 text-body">
+            {period}, by <span className="md:hidden">quarter</span>
+            <span className="hidden md:inline">month</span>
+          </p>
         </div>
         <div className="flex flex-col gap-[var(--gap)]" data-rise style={{ ["--rise-i" as string]: 1 }}>
           <Toggle<Geography> label="Area" value={geo} options={{ tallahassee: "Tallahassee", leon: GEOGRAPHY_LABELS.leon }} onChange={setGeo} />

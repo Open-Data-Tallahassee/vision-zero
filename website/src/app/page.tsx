@@ -13,6 +13,7 @@ export const metadata = {
 
 const photo = {
   woodward: { src: "/images/woodward-crosswalk.jpg", alt: "Cars on Woodward Avenue approaching a pedestrian crossing at Florida State University", w: 1600, h: 1192 },
+  famu: { src: "/images/althea-osceola.jpg", alt: "Traffic lights over Althea Gibson Way at Osceola Street on the FAMU campus", w: 3264, h: 2448 },
   centerville: { src: "/images/centerville-signal.jpg", alt: "Centerville Road curving toward a traffic signal, lined with oaks", w: 1600, h: 1200 },
   fourth: { src: "/images/fourth-avenue-crosswalk.jpg", alt: "A two-lane street with a traffic signal at Fourth Avenue near the Payne Community Center", w: 1600, h: 1053 },
   canopy: { src: "/images/miccosukee-canopy.jpg", alt: "Trailhead sign for the Miccosukee Canopy Road Greenway beside a tree-lined road", w: 1600, h: 1200 },
@@ -43,8 +44,8 @@ export default async function Home() {
           <PhotoCredit src={photo.woodward.src} />
         </div>
         <div className="drift relative hidden overflow-hidden bg-surface-2 lg:block">
-          <Image src={photo.centerville.src} alt={photo.centerville.alt} fill sizes="50vw" className="object-cover grayscale contrast-[1.05]" />
-          <PhotoCredit src={photo.centerville.src} />
+          <Image src={photo.famu.src} alt={photo.famu.alt} fill sizes="50vw" className="object-cover grayscale contrast-[1.05]" />
+          <PhotoCredit src={photo.famu.src} />
         </div>
         <div className="grid grid-cols-2 gap-[var(--gap)]">
           <div className="flex min-h-[44vw] flex-col justify-between gap-6 sm:min-h-0 bg-ink p-5 text-ground sm:aspect-square lg:aspect-auto">
@@ -66,7 +67,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <MonthlyBars monthly={monthly} />
+      <MonthlyBars monthly={monthly} period={period} />
 
       {/* Showcase: square plate and spare text. */}
       <section aria-labelledby="find" className="grid min-h-[88svh] gap-10 py-24 lg:grid-cols-2 lg:gap-0 lg:py-0">
@@ -111,7 +112,7 @@ export default async function Home() {
           </div>
           <div className="flex aspect-square flex-col justify-end overflow-hidden bg-accent p-5 text-accent-ink lg:col-span-4 lg:aspect-auto">
             <p className="text-[clamp(3.5rem,9vw,8.25rem)] leading-[0.86] tracking-[-0.03em] tabular-nums">{county.totals.pedestrian}</p>
-            <p className="mt-3 text-body">crashes involved a person on foot</p>
+            <p className="mt-3 text-body">crashes in Leon County involved a person on foot</p>
           </div>
           <div className="relative aspect-square overflow-hidden bg-surface-2 lg:col-span-4 lg:aspect-auto">
             <Image src={photo.fourth.src} alt={photo.fourth.alt} fill sizes="(min-width: 1024px) 33vw, 50vw" className="object-cover grayscale contrast-[1.05]" />

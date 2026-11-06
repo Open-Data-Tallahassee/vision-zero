@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { formatCount, formatDate } from "@/lib/format";
 import {
   GEOGRAPHIES,
@@ -17,7 +17,7 @@ import {
   type View,
 } from "@/lib/map-state";
 import type { Coverage, CrashFeature, CrashQueryResult, CrashTotals } from "@/server/crashes/types";
-import { TALLAHASSEE_VIEW } from "./CrashMapView";
+import { LEON_BOUNDS, TALLAHASSEE_VIEW, type MapTarget } from "./CrashMapView";
 
 const CrashMapView = dynamic(() => import("./CrashMapView"), { ssr: false, loading: () => <p className="p-6">Loading the map…</p> });
 
@@ -36,6 +36,19 @@ type Loaded = { key: string; ok: true } | { key: string; ok: false; message: str
 const PAGE = 50;
 const EMPTY: CrashFeature[] = [];
 
+// Matches the lg breakpoint. On the server and phones this is false.
+const WIDE = "(min-width: 1024px)";
+const useWide = () =>
+  useSyncExternalStore(
+    (onChange) => {
+      const mq = window.matchMedia(WIDE);
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(WIDE).matches,
+    () => false,
+  );
+
 interface Props {
   initial: MapState;
   coverage: Coverage;
@@ -51,9 +64,10 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
   const [mode, setMode] = useState<"map" | "list">("map");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [shown, setShown] = useState(PAGE);
-  const [target, setTarget] = useState<{ view: View } | undefined>();
+  const [target, setTarget] = useState<MapTarget | undefined>();
   const [retry, setRetry] = useState(0);
   const detailRef = useRef<HTMLHeadingElement>(null);
+  const wide = useWide();
 
   const { geo, from, to, severity, user } = state;
   const query = useMemo(() => serializeMapState({ geo, from, to, severity, user }, coverage), [geo, from, to, severity, user, coverage]);
@@ -101,6 +115,33 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
   const returnTo = encodeURIComponent(href);
   const resetFilters = () => setState((s) => ({ ...defaultMapState(coverage), view: s.view }));
 
+  // The selected crash. On phones it sits over the bottom of the map so the map does not move under the finger;
+  // from lg up, and in the list on phones, it sits above the results.
+  const sheet = !wide && mode === "map";
+  const detail = selected && (
+    <section
+      aria-labelledby="detail-heading"
+      className={`bg-surface p-5 ${sheet ? "absolute inset-x-0 bottom-0 z-10 max-h-[60%] overflow-auto shadow-[0_-6px_20px_rgb(0_0_0/0.18)]" : ""}`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <h2 id="detail-heading" ref={detailRef} tabIndex={-1} className="text-lead">
+          {selected.severity === "fatal" ? "Fatal crash" : "Crash"} on {formatDate(selected.date)}
+        </h2>
+        <button type="button" onClick={() => update({ crash: undefined })} className="min-h-11 px-3 text-small underline">Close</button>
+      </div>
+      <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
+        <div><dt className="text-small text-muted">Time</dt><dd>{selected.time}</dd></div>
+        <div><dt className="text-small text-muted">Involved</dt><dd>{selected.roadUsers.map((u) => ROAD_USER_TEXT[u]).join(", ")}</dd></div>
+        <div><dt className="text-small text-muted">Vehicles</dt><dd className="tabular-nums">{selected.vehicles}</dd></div>
+        <div><dt className="text-small text-muted">People involved</dt><dd className="tabular-nums">{selected.people}</dd></div>
+      </dl>
+      <p className="mt-3 text-small text-muted">
+        Report {selected.id}. &ldquo;People involved&rdquo; counts everyone in the crash, not only people hurt.{" "}
+        <Link href={`/data?returnTo=${returnTo}#crashes-vs-people`} className="underline">Why</Link>
+      </p>
+    </section>
+  );
+
   return (
     // Phone first: count and Filters button, then the map, then totals and coverage.
     // From lg up the first three sit in a left column and the results fill the right.
@@ -118,10 +159,12 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
           >
             {filtersOpen ? "Done" : "Filters"}
           </button>
-          <p className="flex min-h-12 flex-1 items-center bg-surface px-4 text-small" aria-live="polite">
+          <p className="flex min-h-12 flex-1 items-center bg-surface px-4 py-1.5 text-small" aria-live="polite">
             <span>
               <span className="tabular-nums">{formatCount(totals.crashes)}</span> crashes ·{" "}
               <span className="tabular-nums text-fatal">{formatCount(totals.fatalCrashes)}</span> fatal · {geo === "leon" ? "Leon County" : "Tallahassee"}
+              {/* The data is years old; say so before anyone reads the dots as recent. */}
+              <span className="block tabular-nums text-muted">{formatDate(from, "short")} – {formatDate(to, "short")}</span>
             </span>
           </p>
         </div>
@@ -132,7 +175,17 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
               <div className="mt-2 grid grid-cols-2 gap-[var(--gap)]">
                 {GEOGRAPHIES.map((g) => (
                   <label key={g} className={`flex min-h-11 cursor-pointer items-center px-3 text-small has-[:focus-visible]:outline has-[:focus-visible]:outline-2 ${geo === g ? "bg-ink text-ground" : "bg-surface-2"}`}>
-                    <input type="radio" name="geo" value={g} checked={geo === g} onChange={() => update({ geo: g })} className="sr-only" />
+                    <input
+                      type="radio"
+                      name="geo"
+                      value={g}
+                      checked={geo === g}
+                      onChange={() => {
+                        update({ geo: g });
+                        setTarget(g === "leon" ? { bounds: LEON_BOUNDS } : { view: TALLAHASSEE_VIEW });
+                      }}
+                      className="sr-only"
+                    />
                     {GEOGRAPHY_LABELS[g]}
                   </label>
                 ))}
@@ -277,26 +330,7 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
           </div>
         )}
 
-        {selected && (
-          <section aria-labelledby="detail-heading" className="bg-surface p-5">
-            <div className="flex items-start justify-between gap-4">
-              <h2 id="detail-heading" ref={detailRef} tabIndex={-1} className="text-lead">
-                {selected.severity === "fatal" ? "Fatal crash" : "Crash"} on {formatDate(selected.date)}
-              </h2>
-              <button type="button" onClick={() => update({ crash: undefined })} className="min-h-11 px-3 text-small underline">Close</button>
-            </div>
-            <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
-              <div><dt className="text-small text-muted">Time</dt><dd>{selected.time}</dd></div>
-              <div><dt className="text-small text-muted">Involved</dt><dd>{selected.roadUsers.map((u) => ROAD_USER_TEXT[u]).join(", ")}</dd></div>
-              <div><dt className="text-small text-muted">Vehicles</dt><dd className="tabular-nums">{selected.vehicles}</dd></div>
-              <div><dt className="text-small text-muted">People involved</dt><dd className="tabular-nums">{selected.people}</dd></div>
-            </dl>
-            <p className="mt-3 text-small text-muted">
-              Report {selected.id}. &ldquo;People involved&rdquo; counts everyone in the crash, not only people hurt.{" "}
-              <Link href={`/data?returnTo=${returnTo}#crashes-vs-people`} className="underline">Why</Link>
-            </p>
-          </section>
-        )}
+        {selected && !sheet && detail}
 
         <div className={`relative h-[62svh] min-h-[340px] bg-surface-2 lg:h-auto lg:min-h-0 lg:flex-1 ${mode === "map" ? "" : "hidden"}`}>
           {mapError ? (
@@ -305,9 +339,22 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
               <button type="button" onClick={() => setMode("list")} className="button mt-3">Show the list</button>
             </div>
           ) : (
-            <CrashMapView features={features} view={initial.view} target={target} selected={state.crash} onSelect={onSelect} onMove={onMove} onError={setMapError} />
+            <CrashMapView
+              features={features}
+              view={initial.view}
+              startBounds={initial.geo === "leon" ? LEON_BOUNDS : undefined}
+              target={target}
+              selected={state.crash}
+              coverBottom={sheet && !!selected}
+              onSelect={onSelect}
+              onMove={onMove}
+              onError={setMapError}
+            />
           )}
-          {status.kind === "loading" && <p className="absolute left-3 top-3 bg-ground px-3 py-2 text-small" role="status">Loading crashes…</p>}
+          <p className="absolute left-3 top-3 bg-ground px-3 py-2 text-small" role="status">
+            {status.kind === "loading" ? "Loading crashes…" : `Records end ${formatDate(coverage.end, "short")}`}
+          </p>
+          {selected && sheet && detail}
         </div>
 
         {mode === "list" && (
