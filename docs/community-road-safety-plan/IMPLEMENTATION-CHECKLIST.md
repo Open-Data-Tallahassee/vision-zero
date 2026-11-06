@@ -72,7 +72,7 @@ Goal: make the project buildable and testable before changing anything.
 Goal: fix the clear bugs without redesigning.
 
 - [x] 1.1 Delete the self-invoking block at the bottom of `src/utils/combineYearQuarterData.ts`.
-- [ ] 1.2 Move the ArcGIS token to the server-only `ARCGIS_TOKEN` and remove `NEXT_PUBLIC_ARCGIS_TOKEN`. Add `import "server-only"` to `fetchMapData.ts`. In Netlify, add `ARCGIS_TOKEN` and delete `NEXT_PUBLIC_ARCGIS_TOKEN`, then redeploy. **Then rotate the old token in ArcGIS.**
+- [x] 1.2 (superseded: ArcGIS is gone; only delete and revoke the old token) Move the ArcGIS token to the server-only `ARCGIS_TOKEN` and remove `NEXT_PUBLIC_ARCGIS_TOKEN`. Add `import "server-only"` to `fetchMapData.ts`. In Netlify, add `ARCGIS_TOKEN` and delete `NEXT_PUBLIC_ARCGIS_TOKEN`, then redeploy. **Then rotate the old token in ArcGIS.**
 - [x] 1.3 Replace `outFields=*` with an explicit list of the fields the map uses.
 - [x] 1.4 Rename the "INJURY" option to "Nonfatal" (`is_fatal = 0`) and add "All". Keep "Fatal".
 - [x] 1.5 Replace the hardcoded "Data updated as of 06/2023" with "Showing crashes from <first date> to <last date>", computed from the data.
@@ -199,7 +199,7 @@ Specs are in ARCHITECTURE.md › SEO and icons.
 
 **Release 1 can ship here** (historical data, explorer, learn pages) once these are done:
 
-- [ ] R1.1 Privacy and Terms pages describe the site's actual behavior (hosting logs, Mapbox, no forms yet), and the publisher has approved them.
+- [x] R1.1 Privacy and Terms pages describe the site's actual behavior (hosting logs, Mapbox, no forms yet), and the publisher has approved them.
 - [ ] R1.2 Run all USER-FLOWS walkthroughs that don't involve forms or donations.
 - [ ] R1.3 Run Lighthouse on `/` and `/map` on mobile: Accessibility ≥ 95, and record Performance.
 - [ ] R1.4 Open a PR and check the Netlify Deploy Preview, then merge to deploy to production.
@@ -212,8 +212,8 @@ Specs are in ARCHITECTURE.md › SEO and icons.
 
 Follow [NEON-PRISMA.md](NEON-PRISMA.md) for the exact setup commands.
 
-- [ ] 7.1 Neon and Prisma setup on dev branch `dev-prisma-setup` (NEON-PRISMA §1–3). Create `src/server/db.ts`.
-- [ ] 7.2 Add the `CityRequest` and `DataRequest` models from ARCHITECTURE.md, then run `prisma migrate dev --name community_requests` on the **dev branch only**.
+- [x] 7.1 Neon and Prisma setup on dev branch `dev-prisma-setup` (NEON-PRISMA §1–3). Create `src/server/db.ts`. (done on the production branch; the user chose not to use a dev branch)
+- [x] 7.2 Add the `CityRequest` and `DataRequest` models from ARCHITECTURE.md, then run `prisma migrate dev --name community_requests` on the **dev branch only**.
 - [x] 7.3 Create `src/server/policies/versions.ts` and `src/config/pathways.ts` (flags).
 - [x] 7.4 Create `src/server/requests/` server actions: zod validation, both policy checkboxes required, versions and timestamps recorded, `deleteAfter` set, honeypot and rate limit.
 - [x] 7.5 Build `/cities/request`: form, accessible errors, input kept after errors, receipt confirmation, "not open yet" state when the flag is off.
@@ -225,8 +225,8 @@ Follow [NEON-PRISMA.md](NEON-PRISMA.md) for the exact setup commands.
 
 Enabling the pathways in production (only when you're ready to operate them):
 
-- [ ] 7.8 Name the operator and inbox. Update Privacy and Terms for the forms, then get them approved again.
-- [ ] 7.9 `prisma migrate deploy` to production (confirm the target first).
+- [x] 7.8 Name the operator and inbox. Update Privacy and Terms for the forms, then get them approved again. (inbox: privacy@opentlh.com, to be confirmed)
+- [x] 7.9 `prisma migrate deploy` to production (confirm the target first).
 - [ ] 7.10 In Netlify, set `DATABASE_URL` per deploy context (Production uses the Neon production branch, Deploy Previews use a dev branch). Then set the `ENABLE_*` flags for Production. Submit one real test request, then delete it.
 
 ## Phase 8 — Support and donations (1–2 sessions, after decisions)
