@@ -41,4 +41,13 @@ Add the file to `website/public/images/`, add its author, licence and links to `
 
 ## Dark mode and the map
 
-Dark mode is automatic (system setting) and togglable in the header. The map stays light in both themes. To make it follow the theme, create a dark Mapbox style and switch the style URL in `CrashMapView` when `data-theme` changes.
+Dark mode is automatic (system setting) and togglable in the header, and the map follows it.
+
+- **How:** the Mapbox style (`benji-develops/cm4rnea8l00cm01r07kbv2iwa`) imports Mapbox Standard as `basemap` and adds its own red road, label and background layers. `styleBasemap` in `CrashMapView.tsx` changes it at load and on each theme change:
+  - It sets Standard's config to the `monochrome` theme and the `day` or `night` light preset, and turns on road labels.
+  - It hides the style's own layers, except the city-limit fill, which takes the `--accent` colour.
+- **Editing the style in Mapbox Studio:** changes to the Standard import's config are overridden by this code. Change them in `styleBasemap` instead. Any new top-level layer is hidden unless its id is added to the skip list there.
+- **Dot colours:** they come from `--fatal-dot`, `--pedestrian`, `--bicyclist` and `--vehicle`, plus `--map-ink` and `--map-paper` for the rings.
+  - Dark mode overrides all six with lighter values, so they stay at about 3:1 or better against the night basemap.
+  - The legend uses the same tokens.
+  - The data layers set `*-emissive-strength: 1` so Standard's lighting doesn't darken them.

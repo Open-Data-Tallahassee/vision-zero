@@ -14,6 +14,38 @@ export const LEON_BOUNDS: [[number, number], [number, number]] = [[-84.75, 30.25
 export type MapTarget = { view: View } | { bounds: LngLatBoundsLike };
 
 const css = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const isDark = () => document.documentElement.dataset.theme === "dark";
+
+// The style imports Mapbox Standard as "basemap" and adds its own red road, label and background layers on top.
+// Ink on paper: the import goes monochrome (its night preset in dark mode), the style's own layers are hidden,
+// and the city-limit fill takes the site's lichen accent. Red is left for fatal crashes.
+const BASEMAP = "basemap";
+const CITY_LIMIT = "tallahassee-city-limit-0vutw5";
+
+function styleBasemap(map: MapboxMap) {
+  const dark = isDark();
+  map.setConfigProperty(BASEMAP, "theme", "monochrome");
+  map.setConfigProperty(BASEMAP, "lightPreset", dark ? "night" : "day");
+  map.setConfigProperty(BASEMAP, "showRoadLabels", true);
+  map.setConfigProperty(BASEMAP, "showAdminBoundaries", false);
+  for (const layer of map.getStyle()?.layers ?? []) {
+    if (layer.id === CITY_LIMIT || layer.id === "crashes") continue;
+    map.setLayoutProperty(layer.id, "visibility", "none");
+  }
+  if (map.getLayer(CITY_LIMIT)) {
+    map.setPaintProperty(CITY_LIMIT, "fill-color", css("--accent"));
+    map.setPaintProperty(CITY_LIMIT, "fill-outline-color", css("--field-2-step-3"));
+    map.setPaintProperty(CITY_LIMIT, "fill-opacity", dark ? 0.12 : ["interpolate", ["linear"], ["zoom"], 9, 0.6, 12, 0.35]);
+    map.setPaintProperty(CITY_LIMIT, "fill-emissive-strength", 1);
+  }
+}
+
+// Dot colours come from the theme's tokens, so they are set again when the theme changes.
+function paintCrashes(map: MapboxMap) {
+  if (!map.getLayer("crashes")) return;
+  map.setPaintProperty("crashes", "circle-color", ["case", ["get", "fatal"], css("--fatal-dot"), ["match", ["get", "user"], "pedestrian", css("--pedestrian"), "bicyclist", css("--bicyclist"), css("--vehicle")]]);
+  map.setPaintProperty("crashes", "circle-stroke-color", ["case", ["boolean", ["feature-state", "selected"], false], css("--map-ink"), css("--map-paper")]);
+}
 
 const toGeoJson = (features: CrashFeature[]): GeoJSON.FeatureCollection => ({
   type: "FeatureCollection",
@@ -82,6 +114,7 @@ export default function CrashMapView({ features, view, startBounds, target, sele
       resizeObserver = new ResizeObserver(() => map?.resize());
       resizeObserver.observe(container.current);
       map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-right");
+      map.on("style.load", () => map && styleBasemap(map));
       map.on("error", (e) => {
         if (!ready.current) latest.current.onError(`The map couldn't load (${e.error?.message ?? "unknown error"}). The list view still works.`);
       });
@@ -97,13 +130,14 @@ export default function CrashMapView({ features, view, startBounds, target, sele
           layout: { "circle-sort-key": ["case", ["get", "fatal"], 1, 0] },
           paint: {
             "circle-radius": ["interpolate", ["linear"], ["zoom"], 9, ["case", ["get", "fatal"], 5, 2], 14, ["case", ["get", "fatal"], 10, 6]],
-            "circle-color": ["case", ["get", "fatal"], css("--fatal-dot"), ["match", ["get", "user"], "pedestrian", css("--pedestrian"), "bicyclist", css("--bicyclist"), css("--vehicle")]],
             // 0.85 keeps nonfatal dots near 3:1 against the basemap; smaller dots at low zoom stop them merging.
             "circle-opacity": ["case", ["get", "fatal"], 0.95, 0.85],
-            "circle-stroke-color": ["case", ["boolean", ["feature-state", "selected"], false], css("--map-ink"), "#ffffff"],
+            // Standard's light presets shade every layer; data keeps its own colours by day and by night.
+            "circle-emissive-strength": 1,
             "circle-stroke-width": ["case", ["boolean", ["feature-state", "selected"], false], 3, ["case", ["get", "fatal"], 1.5, 0]],
           },
         });
+        paintCrashes(map);
         map.on("click", "crashes", (e: MapMouseEvent & { features?: GeoJSON.Feature[] }) => {
           const id = e.features?.[0]?.properties?.id;
           if (id) latest.current.onSelect(String(id));
@@ -118,9 +152,17 @@ export default function CrashMapView({ features, view, startBounds, target, sele
         latest.current.onMove({ lng: c.lng, lat: c.lat, z: map.getZoom() });
       });
     })();
+    // The theme toggle sets data-theme on <html>; follow it.
+    const themeObserver = new MutationObserver(() => {
+      if (!map || !ready.current) return;
+      styleBasemap(map);
+      paintCrashes(map);
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     return () => {
       cancelled = true;
       ready.current = false;
+      themeObserver.disconnect();
       resizeObserver?.disconnect();
       map?.remove();
       mapRef.current = null;

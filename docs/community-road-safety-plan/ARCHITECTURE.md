@@ -305,6 +305,6 @@ Keep `website/.env.example` with names only.
 
 ## Theme, credits and error pages
 
-- **Dark mode.** Colours are CSS variables in `globals.css`. `:root[data-theme="dark"]` overrides them. An inline script in `<head>` sets `data-theme` from `localStorage` or the system setting before first paint. `ThemeToggle` (header) saves the choice. Without JavaScript the site stays light. The map basemap and dot colours are the same in both themes so the legend always matches; a dark Mapbox style is a possible later change.
+- **Dark mode.** Colours are CSS variables in `globals.css`. `:root[data-theme="dark"]` overrides them. An inline script in `<head>` sets `data-theme` from `localStorage` or the system setting before first paint. `ThemeToggle` (header) saves the choice. Without JavaScript the site stays light. The map follows the theme: Mapbox Standard's monochrome theme with its day or night light preset, and dark-mode dot tokens that the legend shares (see OPERATIONS.md › Dark mode and the map).
 - **Photo credits.** One source of truth: `src/content/photo-credits.json` (author, licence, links). `PhotoCredit` renders the on-image chip; the footer lists full titles. Add the entry first when adding any photograph.
 - **404.** `src/app/not-found.tsx` is a tile board in the site's style with links to the main pages and a "report a broken link" link to GitHub issues.

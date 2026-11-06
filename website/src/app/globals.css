@@ -23,8 +23,9 @@
   --field-2-step-3: #4d7058;
 
   --fatal: #c0291d; /* text */
-  --fatal-dot: #c0291d; /* map dots and legend; same in both themes because the map stays light */
-  --map-ink: #1d221f;
+  --fatal-dot: #c0291d; /* map dots and legend */
+  --map-ink: #1d221f; /* ring on the selected crash */
+  --map-paper: #ffffff; /* ring on fatal crashes */
   --pedestrian: #b5491a;
   --bicyclist: #8a6a00;
   --vehicle: #2f6f8f;
@@ -42,7 +43,7 @@
 }
 
 /* Dark theme. A script in <head> sets data-theme from the saved choice or the system setting before first paint.
-   Only surfaces and text change: the green fields, pale accent tiles and map colours keep their meaning. */
+   Surfaces, text and the map's dots change; the green fields and pale accent tiles keep their meaning. */
 :root[data-theme="dark"] {
   --bg: #111612;
   --surface: #1a211c;
@@ -52,7 +53,14 @@
   --line: #3b463e;
   --accent: #bcd7a6;
   --fatal: #ff8f84;
-    color-scheme: dark;
+  /* The map switches to its night preset, so the dots and rings lighten to stay at 3:1 or better. */
+  --fatal-dot: #f05a4b;
+  --pedestrian: #e07a45;
+  --bicyclist: #c9a227;
+  --vehicle: #5fa3c7;
+  --map-ink: #e8ece5;
+  --map-paper: #111612;
+  color-scheme: dark;
 }
 
 @layer base {

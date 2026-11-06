@@ -203,7 +203,8 @@ The table below tracks whether each item has been fixed. Update its Status as it
 |---|---|
 | Date range on the map strip (P1) | done: the strip shows the active dates, and the map shows "Records end Jun 30, 2021" |
 | Crash location field (P1) | open, needs data work (Phase 2) |
-| Grayscale basemap, fatal on top, dot contrast, county fit (P1) | partly done: fatal dots draw on top; nonfatal dots are 0.85 opacity (about 3:1, smaller at low zoom); choosing Leon County, or a link with `geo=leon`, fits the county. Grayscale basemap still open |
+| Grayscale basemap, fatal on top, dot contrast, county fit (P1) | done: monochrome Standard basemap with a night version for dark mode; the old red roads are hidden; the city limits are tinted with the lichen accent; fatal dots draw on top; nonfatal dots reach about 3:1; dark mode has lighter dot colours; Leon County fits the county |
 | Phone detail as a bottom sheet (P2) | done: on phones in map view the detail covers the bottom of the map, and the map pans the selected dot above it |
 | Home-page area labels and chart (P2) | done: the chart opens on Leon County, the pedestrian figure names Leon County, and the phone chart says "by quarter"; the period comes from `formatCoverage` |
 | 404 button covered by a tile (P2) | done: rows grow with their content; checked at 1280×800 |
+| Mapbox logo covered by the phone sheet | done: the sheet floats 40px above the map's bottom edge, so the logo and attribution stay visible |

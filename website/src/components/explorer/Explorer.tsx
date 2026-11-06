@@ -115,13 +115,14 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
   const returnTo = encodeURIComponent(href);
   const resetFilters = () => setState((s) => ({ ...defaultMapState(coverage), view: s.view }));
 
-  // The selected crash. On phones it sits over the bottom of the map so the map does not move under the finger;
+  // The selected crash. On phones it floats over the bottom of the map so the map does not move under the finger,
+  // stopping above the Mapbox logo and attribution, which have to stay visible;
   // from lg up, and in the list on phones, it sits above the results.
   const sheet = !wide && mode === "map";
   const detail = selected && (
     <section
       aria-labelledby="detail-heading"
-      className={`bg-surface p-5 ${sheet ? "absolute inset-x-0 bottom-0 z-10 max-h-[60%] overflow-auto shadow-[0_-6px_20px_rgb(0_0_0/0.18)]" : ""}`}
+      className={`bg-surface p-5 ${sheet ? "absolute inset-x-2 bottom-10 z-10 max-h-[calc(60%-2.5rem)] overflow-auto shadow-[0_6px_24px_rgb(0_0_0/0.22)]" : ""}`}
     >
       <div className="flex items-start justify-between gap-4">
         <h2 id="detail-heading" ref={detailRef} tabIndex={-1} className="text-lead">
@@ -196,7 +197,7 @@ export default function Explorer({ initial, coverage, initialTotals }: Props) {
               <legend className="text-body">Severity</legend>
               <div className="mt-2 grid grid-cols-3 gap-[var(--gap)]">
                 {SEVERITIES.map((s) => (
-                  <label key={s} className={`flex min-h-11 cursor-pointer items-center justify-center px-2 text-center text-small has-[:focus-visible]:outline has-[:focus-visible]:outline-2 ${severity === s ? (s === "fatal" ? "bg-fatal-dot text-white" : "bg-ink text-ground") : "bg-surface-2"}`}>
+                  <label key={s} className={`flex min-h-11 cursor-pointer items-center justify-center px-2 text-center text-small has-[:focus-visible]:outline has-[:focus-visible]:outline-2 ${severity === s ? (s === "fatal" ? "bg-fatal-dot text-[var(--map-paper)]" : "bg-ink text-ground") : "bg-surface-2"}`}>
                     <input type="radio" name="severity" value={s} checked={severity === s} onChange={() => update({ severity: s })} className="sr-only" />
                     {s === "all" ? "All" : s === "fatal" ? "Fatal" : "Nonfatal"}
                   </label>
