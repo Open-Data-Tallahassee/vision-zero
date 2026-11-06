@@ -263,3 +263,12 @@ Do this only after Phase 2 is reconciled and if ArcGIS becomes a limitation.
 ## Phase 10 — Later (not in first release)
 
 Monthly trend charts, road-user breakdowns, corridor rankings with a documented method, more Florida cities. Each needs its own scope check against the data baseline.
+
+## Last: clean the git history (do this last, well after launch)
+
+The raw data files were removed from the repo on 2026-11-06, but earlier commits on GitHub still contain them. That includes `leon-people-2019-q2.csv`, which has home ZIP code, age and sex.
+
+- [ ] H.1 Make sure `data/private/` is backed up off this machine. After the rewrite, it is the only copy of the raw files.
+- [ ] H.2 Rewrite the history to drop everything under `data/` except `data/public/`, `data/docs/`, `data/README.md` and `data/private/README.md`. Use `git filter-repo`, on a fresh mirror clone.
+- [ ] H.3 Force-push every branch and tag. Tell anyone with a clone or fork to re-clone. Ask GitHub Support to purge cached views and pull-request references to the removed files.
+- [ ] H.4 Check that `git log --all -- data/quarterly-tranches` and `git log --all -- data/leon-county-crashes` return nothing on a fresh clone.
