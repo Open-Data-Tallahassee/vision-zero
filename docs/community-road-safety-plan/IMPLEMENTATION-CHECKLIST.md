@@ -41,7 +41,7 @@ TODO: privacy contact is privacy@opentlh.com for now; confirm or replace it (web
 - **No `netlify.toml`.** Netlify's UI build settings already work. Preview indexing is blocked by `robots.ts`, which checks `CONTEXT`.
 - **Prisma 7.10.1** (stable; `latest` on npm points at an 8.0 release candidate) with the Neon HTTP adapter.
 - **Name and polish (commit 3b65442):** the site is "Vision Zero TLH" everywhere it names itself (header, hero, footer, titles, manifest, share image). Every photo shows an on-image credit (`PhotoCredit`, data in `src/content/photo-credits.json`) and the footer lists full credits. Dark mode: `data-theme` on `<html>`, set by an inline head script from the saved or system preference; `ThemeToggle` in the header. The map basemap and dot colours stay the same in both themes. A custom 404 (`src/app/not-found.tsx`) returns a real 404 status.
-- **Phase 5 used the design-taste-frontend skill** (direction "The printed annual", seed 676698518) and its inspector. The `/impeccable` critique (5.1) is in DESIGN-REVIEW.md; `website/DESIGN.md` (5.2) is still to do.
+- **Phase 5 used the design-taste-frontend skill** (direction "The printed annual", seed 676698518) and its inspector. The `/impeccable` critique (5.1) is in DESIGN-REVIEW.md, and the design system is recorded in `website/DESIGN.md` (5.2).
 
 ## Progress log
 
@@ -151,7 +151,7 @@ Goal: a working, accessible `/map` driven by the URL.
 Goal: apply your design direction to the whole site. Run the design skills on the rendered site, not on mockups.
 
 - [x] 5.1 Run `/impeccable` critique on the Phase 4 explorer and the "before" screenshots. Save findings to `docs/community-road-safety-plan/DESIGN-REVIEW.md`. Done 2026-11-06: 27/40, three P1s (map shows no date range, crashes have no location, map colours bury fatal crashes). No "before" screenshots existed, so there was no comparison.
-- [ ] 5.2 Use `/design-taste-frontend` to set the direction: type scale, palette (accessible severity colors), spacing and tone. Record it in `website/DESIGN.md`.
+- [x] 5.2 Use `/design-taste-frontend` to set the direction: type scale, palette (accessible severity colors), spacing and tone. Record it in `website/DESIGN.md`. Done 2026-11-06: written from the shipped tokens and components ("The Printed Annual"), including the dark theme and the monochrome map.
 - [x] 5.3 Put tokens in `tailwind.config.ts` and `globals.css`. Replace one-off colors such as `bg-[#C4291D]`.
 - [x] 5.4 Build the shared layout: header with the main navigation and a footer with About, Privacy and Terms.
 - [x] 5.5 Build the overview page `/`: purpose, verified coverage, headline counts from `queryCrashes`, **Explore the map**, and later sections for the city request and support.
